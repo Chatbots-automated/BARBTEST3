@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { format, differenceInDays, eachDayOfInterval, parseISO, isSameDay, subDays, isAfter, startOfToday, isBefore } from 'date-fns';
+import { format, differenceInDays, eachDayOfInterval, parseISO, isSameDay, subDays } from 'date-fns';
 import { lt } from 'date-fns/locale';
 import { Calendar, Tag, X, Check, Loader2, AlertCircle, Users, Phone, Globe, Info } from 'lucide-react';
 import { Apartment, BookingDetails, Coupon } from '../types';
@@ -137,32 +137,14 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
     return bookedDates.some(bookedDate => isSameDay(bookedDate, date));
   };
 
-  const isDateAvailable = (date: Date) => {
-    const today = startOfToday();
-    
-    // Past dates are always unavailable
-    if (isBefore(date, today)) {
-      return false;
-    }
-    
-    // Check if the date is booked
-    return !isDateBooked(date);
-  };
-
   const handleDateChange = (type: 'checkIn' | 'checkOut', date: Date | null) => {
     if (!date) return;
-
-    const today = startOfToday();
-    if (isBefore(date, today)) {
-      setError('Cannot select past dates');
-      return;
-    }
 
     const newBookingDetails = { ...bookingDetails };
 
     if (type === 'checkIn') {
-      if (!isDateAvailable(date)) {
-        setError('This date is not available');
+      if (isDateBooked(date)) {
+        setError('This date is already booked');
         return;
       }
       newBookingDetails.checkIn = date;
@@ -170,8 +152,8 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
         newBookingDetails.checkOut = undefined;
       }
     } else {
-      if (!isDateAvailable(date)) {
-        setError('This date is not available');
+      if (isDateBooked(date)) {
+        setError('This date is already booked');
         return;
       }
       newBookingDetails.checkOut = date;
@@ -183,8 +165,8 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
         end: newBookingDetails.checkOut,
       });
 
-      if (daysToCheck.some(date => !isDateAvailable(date))) {
-        setError('Some days in this range are not available');
+      if (daysToCheck.some(date => isDateBooked(date))) {
+        setError('Some days in this range are already booked');
         return;
       }
     }
@@ -428,7 +410,7 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
           <div className="mt-6 pt-6 border-t border-gray-200">
             <button
               onClick={() => setShowRules(false)}
-              className="w-full bg-[#807730] hover:bg-[#6a6428] text-white py-4 rounded-xl font-medium transition-colors"
+              className="w-full bg-primary hover:bg-primary-dark text-white py-4 rounded-xl font-medium transition-colors"
             >
               Grįžti į rezervaciją
             </button>
@@ -487,12 +469,11 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
               </div>
               {bookingDetails.hasPets && (
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Augint
-inio mokestis</span>
+                  <span className="text-gray-600">Augintinio mokestis</span>
                   <span className="font-medium">10€</span>
                 </div>
               )}
-              {apartment.id === 'pikulas'  && bookingDetails.extraBed && (
+              {apartment.id === 'pikulas' && bookingDetails.extraBed && (
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600">Papildoma lova</span>
                   <span className="font-medium">15€</span>
@@ -531,7 +512,7 @@ inio mokestis</span>
             <button
               onClick={handleConfirmBooking}
               disabled={isLoading}
-              className="w-full bg-[#807730] hover:bg-[#6a6428] text-white py-4 rounded-xl font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-[#807730] disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full bg-primary hover:bg-primary-dark text-white py-4 rounded-xl font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
@@ -562,8 +543,8 @@ inio mokestis</span>
         </button>
 
         <div className="flex items-center gap-3 mb-8">
-          <div className="bg-[#807730]/10 p-2 rounded-lg">
-            <Calendar className="w-6 h-6 text-[#807730]" />
+          <div className="bg-primary/10 p-2 rounded-lg">
+            <Calendar className="w-6 h-6 text-primary" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900">Rezervacija</h2>
         </div>
@@ -589,25 +570,9 @@ inio mokestis</span>
                   excludeDates={bookedDates}
                   dateFormat="yyyy-MM-dd"
                   locale={lt}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#807730] focus:border-[#807730] bg-white"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary bg-white"
                   placeholderText="Pasirinkite datą"
                   showPopperArrow={false}
-                  dayClassName={(date) => {
-                    const today = startOfToday();
-                    if (isBefore(date, today)) {
-                      return 'text-gray-300 cursor-not-allowed';
-                    }
-                    return isDateBooked(date) ? 'text-red-400 line-through cursor-not-allowed' : 'text-green-600 cursor-pointer';
-                  }}
-                  renderDayContents={(day, date) => (
-                    <div className="flex flex-col items-center">
-                      <span>{day}</span>
-                      <span className="text-xs">{apartment.price_per_night}€</span>
-                    </div>
-                  )}
-                  selectsStart
-                  startDate={bookingDetails.checkIn}
-                  endDate={bookingDetails.checkOut}
                 />
               </div>
               <div>
@@ -621,25 +586,9 @@ inio mokestis</span>
                   excludeDates={bookedDates}
                   dateFormat="yyyy-MM-dd"
                   locale={lt}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#807730] focus:border-[#807730] bg-white"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary bg-white"
                   placeholderText="Pasirinkite datą"
                   showPopperArrow={false}
-                  dayClassName={(date) => {
-                    const today = startOfToday();
-                    if (isBefore(date, today)) {
-                      return 'text-gray-300 cursor-not-allowed';
-                    }
-                    return isDateBooked(date) ? 'text-red-400 line-through cursor-not-allowed' : 'text-green-600 cursor-pointer';
-                  }}
-                  renderDayContents={(day, date) => (
-                    <div className="flex flex-col items-center">
-                      <span>{day}</span>
-                      <span className="text-xs">{apartment.price_per_night}€</span>
-                    </div>
-                  )}
-                  selectsEnd
-                  startDate={bookingDetails.checkIn}
-                  endDate={bookingDetails.checkOut}
                 />
               </div>
             </div>
@@ -656,7 +605,7 @@ inio mokestis</span>
                   max="4"
                   value={bookingDetails.numberOfGuests || 2}
                   onChange={(e) => setBookingDetails({ ...bookingDetails, numberOfGuests: parseInt(e.target.value) })}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#807730] focus:border-[#807730]"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                 />
               </div>
             </div>
@@ -667,7 +616,7 @@ inio mokestis</span>
                   type="checkbox"
                   checked={bookingDetails.hasPets || false}
                   onChange={(e) => setBookingDetails({ ...bookingDetails, hasPets: e.target.checked })}
-                  className="w-5 h-5 rounded border-gray-300 text-[#807730] focus:ring-[#807730]"
+                  className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
                 />
                 <span className="text-gray-700">Augintinio mokestis (10€)</span>
               </label>
@@ -678,7 +627,7 @@ inio mokestis</span>
                     type="checkbox"
                     checked={bookingDetails.extraBed || false}
                     onChange={(e) => setBookingDetails({ ...bookingDetails, extraBed: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-300 text-[#807730] focus:ring-[#807730]"
+                    className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
                   />
                   <span className="text-gray-700">Papildoma lova (15€)</span>
                 </label>
@@ -714,7 +663,7 @@ inio mokestis</span>
 
             <button
               onClick={handleNextStep}
-              className="w-full bg-[#807730] hover:bg-[#6a6428] text-white py-4 rounded-xl font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-[#807730]"
+              className="w-full bg-primary hover:bg-primary-dark text-white py-4 rounded-xl font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary"
             >
               Tęsti rezervaciją
             </button>
@@ -729,7 +678,7 @@ inio mokestis</span>
                 type="text"
                 value={bookingDetails.guestName || ''}
                 onChange={(e) => setBookingDetails({ ...bookingDetails, guestName: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#807730] focus:border-[#807730]"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                 placeholder="Įveskite vardą ir pavardę"
               />
             </div>
@@ -742,7 +691,7 @@ inio mokestis</span>
                 type="email"
                 value={bookingDetails.guestEmail || ''}
                 onChange={(e) => setBookingDetails({ ...bookingDetails, guestEmail: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#807730] focus:border-[#807730]"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                 placeholder="Įveskite el. paštą"
               />
             </div>
@@ -757,7 +706,7 @@ inio mokestis</span>
                   type="text"
                   value={bookingDetails.country || ''}
                   onChange={(e) => setBookingDetails({ ...bookingDetails, country: e.target.value })}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#807730] focus:border-[#807730]"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                   placeholder="Įveskite šalį"
                 />
               </div>
@@ -773,7 +722,7 @@ inio mokestis</span>
                   type="tel"
                   value={bookingDetails.phoneNumber || ''}
                   onChange={(e) => setBookingDetails({ ...bookingDetails, phoneNumber: e.target.value })}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#807730] focus:border-[#807730]"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                   placeholder="+370"
                 />
               </div>
@@ -784,7 +733,7 @@ inio mokestis</span>
                 type="text"
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value)}
-                className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#807730] focus:border-[#807730]"
+                className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
                 placeholder="Nuolaidos kodas"
               />
               <button
@@ -815,7 +764,7 @@ inio mokestis</span>
                   id="rules-acceptance"
                   checked={acceptedRules}
                   onChange={(e) => setAcceptedRules(e.target.checked)}
-                  className="mt-1 w-5 h-5 rounded border-gray-300 text-[#807730] focus:ring-[#807730]"
+                  className="mt-1 w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
                 />
                 <div>
                   <label htmlFor="rules-acceptance" className="text-gray-700 font-medium">
@@ -824,7 +773,7 @@ inio mokestis</span>
                   <button
                     type="button"
                     onClick={() => setShowRules(true)}
-                    className="block text-sm text-[#807730] hover:text-[#6a6428] mt-1 flex items-center gap-1"
+                    className="block text-sm text-primary hover:text-primary-dark mt-1 flex items-center gap-1"
                   >
                     <Info className="w-4 h-4" />
                     Peržiūrėti taisykles
@@ -843,7 +792,7 @@ inio mokestis</span>
               </button>
               <button
                 type="submit"
-                className="flex-1 bg-[#807730] hover:bg-[#6a6428] text-white py-4 rounded-xl font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-[#807730]"
+                className="flex-1 bg-primary hover:bg-primary-dark text-white py-4 rounded-xl font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary"
               >
                 Tęsti
               </button>
