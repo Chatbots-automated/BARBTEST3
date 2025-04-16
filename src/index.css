@@ -52,13 +52,9 @@
   @apply content-[attr(data-price)] absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-[10px] text-gray-500;
 }
 
-.react-datepicker__day--disabled {
-  @apply text-gray-300 hover:bg-transparent cursor-not-allowed;
-}
-
 /* Past dates */
-.react-datepicker__day--disabled:not(.react-datepicker__day--excluded) {
-  @apply text-gray-400;
+.react-datepicker__day--disabled {
+  @apply text-gray-400 hover:bg-transparent cursor-not-allowed !important;
 }
 
 /* Available dates */
