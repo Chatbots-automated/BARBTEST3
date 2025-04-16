@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { format, differenceInDays, eachDayOfInterval, parseISO, isSameDay, subDays, isAfter, startOfToday } from 'date-fns';
+import { format, differenceInDays, eachDayOfInterval, parseISO, isSameDay, subDays, isAfter, startOfToday, isBefore } from 'date-fns';
 import { lt } from 'date-fns/locale';
 import { Calendar, Tag, X, Check, Loader2, AlertCircle, Users, Phone, Globe, Info } from 'lucide-react';
 import { Apartment, BookingDetails, Coupon } from '../types';
@@ -139,16 +139,24 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
 
   const isDateAvailable = (date: Date) => {
     const today = startOfToday();
+    
     // Past dates are always unavailable
-    if (!isAfter(date, today)) {
+    if (isBefore(date, today)) {
       return false;
     }
+    
     // Check if the date is booked
     return !isDateBooked(date);
   };
 
   const handleDateChange = (type: 'checkIn' | 'checkOut', date: Date | null) => {
     if (!date) return;
+
+    const today = startOfToday();
+    if (isBefore(date, today)) {
+      setError('Cannot select past dates');
+      return;
+    }
 
     const newBookingDetails = { ...bookingDetails };
 
@@ -479,7 +487,8 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
               </div>
               {bookingDetails.hasPets && (
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Augintinio mokestis</span>
+                  <span className="text-gray-600">Augint
+inio mokestis</span>
                   <span className="font-medium">10€</span>
                 </div>
               )}
@@ -584,7 +593,8 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
                   placeholderText="Pasirinkite datą"
                   showPopperArrow={false}
                   dayClassName={(date) => {
-                    if (!isAfter(date, startOfToday())) {
+                    const today = startOfToday();
+                    if (isBefore(date, today)) {
                       return 'text-gray-300 cursor-not-allowed';
                     }
                     return isDateBooked(date) ? 'text-red-400 line-through cursor-not-allowed' : 'text-green-600 cursor-pointer';
@@ -595,6 +605,9 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
                       <span className="text-xs">{apartment.price_per_night}€</span>
                     </div>
                   )}
+                  selectsStart
+                  startDate={bookingDetails.checkIn}
+                  endDate={bookingDetails.checkOut}
                 />
               </div>
               <div>
@@ -612,7 +625,8 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
                   placeholderText="Pasirinkite datą"
                   showPopperArrow={false}
                   dayClassName={(date) => {
-                    if (!isAfter(date, startOfToday())) {
+                    const today = startOfToday();
+                    if (isBefore(date, today)) {
                       return 'text-gray-300 cursor-not-allowed';
                     }
                     return isDateBooked(date) ? 'text-red-400 line-through cursor-not-allowed' : 'text-green-600 cursor-pointer';
@@ -623,6 +637,9 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
                       <span className="text-xs">{apartment.price_per_night}€</span>
                     </div>
                   )}
+                  selectsEnd
+                  startDate={bookingDetails.checkIn}
+                  endDate={bookingDetails.checkOut}
                 />
               </div>
             </div>

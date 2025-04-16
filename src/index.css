@@ -67,20 +67,33 @@
   @apply text-red-400 line-through cursor-not-allowed hover:bg-transparent !important;
 }
 
+/* Selected date */
 .react-datepicker__day--selected {
   @apply bg-[#807730] text-white hover:bg-[#6a6428] rounded-full cursor-pointer !important;
 }
 
+/* Keyboard selected date */
 .react-datepicker__day--keyboard-selected {
   @apply bg-[#807730] text-white hover:bg-[#6a6428] rounded-full cursor-pointer !important;
 }
 
+/* Date range styles */
 .react-datepicker__day--in-range {
-  @apply bg-[#807730]/10 text-[#807730];
+  @apply bg-[#807730]/10 text-[#807730] !important;
+}
+
+.react-datepicker__day--range-start,
+.react-datepicker__day--range-end {
+  @apply bg-[#807730] text-white rounded-full !important;
 }
 
 .react-datepicker__day--in-selecting-range {
-  @apply bg-[#807730]/10 text-[#807730];
+  @apply bg-[#807730]/10 text-[#807730] !important;
+}
+
+.react-datepicker__day--selecting-range-start,
+.react-datepicker__day--selecting-range-end {
+  @apply bg-[#807730] text-white rounded-full !important;
 }
 
 .react-datepicker__day--today {

@@ -3,7 +3,6 @@ import { ApartmentCard } from '../components/ApartmentCard';
 import { BookingForm } from '../components/BookingForm';
 import { Apartment } from '../types';
 import { supabase } from '../lib/supabase';
-import { Mail, Phone, MapPin } from 'lucide-react';
 
 export function HomePage() {
   const [selectedApartment, setSelectedApartment] = useState<Apartment | null>(null);
@@ -93,52 +92,52 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section className="py-24 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-            Susisiekite su mumis
-          </h2>
-          <div className="max-w-lg mx-auto space-y-6">
-            <div className="flex items-center gap-4 p-6 bg-gray-50 rounded-xl">
-              <Mail className="w-6 h-6 text-gray-600" />
-              <div>
-                <p className="font-medium text-gray-900">El. paštas</p>
-                <a href="mailto:info@girioshorizontas.lt" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  info@girioshorizontas.lt
+      <footer className="bg-[#1f3325] text-[#E5DFD3] py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-12">
+            <div>
+              <h2 className="text-3xl font-medium mb-4">Susisiekite su mumis</h2>
+              <div className="space-y-2 text-lg">
+                <p>Adresas: Kudronių Girios K. 12, Trakai</p>
+                <p>+37061580004</p>
+                <p>info@girioshorizontas.lt</p>
+              </div>
+            </div>
+            
+            <div>
+              <h2 className="text-3xl font-medium mb-4">Sekite mus</h2>
+              <div className="flex gap-4">
+                <a 
+                  href="https://facebook.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-[#E5DFD3] p-3 rounded-full hover:bg-white transition-colors"
+                >
+                  <img 
+                    src="https://i.imgur.com/CSUHLiZ.png" 
+                    alt="Facebook" 
+                    className="w-6 h-6"
+                  />
+                </a>
+                <a 
+                  href="https://instagram.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-[#E5DFD3] p-3 rounded-full hover:bg-white transition-colors"
+                >
+                  <img 
+                    src="https://i.imgur.com/lTHtTh9.png" 
+                    alt="Instagram" 
+                    className="w-6 h-6"
+                  />
                 </a>
               </div>
             </div>
-            <div className="flex items-center gap-4 p-6 bg-gray-50 rounded-xl">
-              <Phone className="w-6 h-6 text-gray-600" />
-              <div>
-                <p className="font-medium text-gray-900">Telefonas</p>
-                <a href="tel:+37061234567" className="text-gray-600 hover:text-gray-900 transition-colors">
-                  +370 612 34567
-                </a>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 p-6 bg-gray-50 rounded-xl">
-              <MapPin className="w-6 h-6 text-gray-600" />
-              <div>
-                <p className="font-medium text-gray-900">Adresas</p>
-                <p className="text-gray-600">Trakų g. 1, Trakai, Lietuva</p>
-              </div>
+
+            <div className="pt-8 border-t border-[#E5DFD3]/20 text-center">
+              <p>© {new Date().getFullYear()} Girios Horizontas - All rights reserved</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      <footer className="bg-white py-8 border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <img 
-            src="/logo.png" 
-            alt="Girios Horizontas" 
-            className="h-12 mx-auto mb-4"
-          />
-          <p className="text-gray-600">
-            © {new Date().getFullYear()} Girios Horizontas. Visos teisės saugomos.
-          </p>
         </div>
       </footer>
 
