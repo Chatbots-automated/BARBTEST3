@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { format, differenceInDays, eachDayOfInterval, parseISO, isSameDay, subDays } from 'date-fns';
+import { format, differenceInDays, eachDayOfInterval, parseISO, isSameDay, subDays, isAfter, startOfToday } from 'date-fns';
 import { lt } from 'date-fns/locale';
 import { Calendar, Tag, X, Check, Loader2, AlertCircle, Users, Phone, Globe, Info } from 'lucide-react';
 import { Apartment, BookingDetails, Coupon } from '../types';
@@ -137,14 +137,24 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
     return bookedDates.some(bookedDate => isSameDay(bookedDate, date));
   };
 
+  const isDateAvailable = (date: Date) => {
+    const today = startOfToday();
+    // Past dates are always unavailable
+    if (!isAfter(date, today)) {
+      return false;
+    }
+    // Check if the date is booked
+    return !isDateBooked(date);
+  };
+
   const handleDateChange = (type: 'checkIn' | 'checkOut', date: Date | null) => {
     if (!date) return;
 
     const newBookingDetails = { ...bookingDetails };
 
     if (type === 'checkIn') {
-      if (isDateBooked(date)) {
-        setError('This date is already booked');
+      if (!isDateAvailable(date)) {
+        setError('This date is not available');
         return;
       }
       newBookingDetails.checkIn = date;
@@ -152,8 +162,8 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
         newBookingDetails.checkOut = undefined;
       }
     } else {
-      if (isDateBooked(date)) {
-        setError('This date is already booked');
+      if (!isDateAvailable(date)) {
+        setError('This date is not available');
         return;
       }
       newBookingDetails.checkOut = date;
@@ -165,8 +175,8 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
         end: newBookingDetails.checkOut,
       });
 
-      if (daysToCheck.some(date => isDateBooked(date))) {
-        setError('Some days in this range are already booked');
+      if (daysToCheck.some(date => !isDateAvailable(date))) {
+        setError('Some days in this range are not available');
         return;
       }
     }
@@ -473,7 +483,8 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
                   <span className="font-medium">10€</span>
                 </div>
               )}
-              {apartment.id === 'pikulas' && bookingDetails.extraBed && (
+              {apartment.id === 'pikulas' && bookingDetails.extra
+Bed && (
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600">Papildoma lova</span>
                   <span className="font-medium">15€</span>
@@ -573,9 +584,12 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
                   className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#807730] focus:border-[#807730] bg-white"
                   placeholderText="Pasirinkite datą"
                   showPopperArrow={false}
-                  dayClassName={(date) => 
-                    `text-center ${isDateBooked(date) ? 'bg-red-100' : ''}`
-                  }
+                  dayClassName={(date) => {
+                    if (!isAfter(date, startOfToday())) {
+                      return 'text-gray-300 cursor-not-allowed';
+                    }
+                    return isDateBooked(date) ? 'text-red-400 line-through cursor-not-allowed' : 'text-green-600 cursor-pointer';
+                  }}
                   renderDayContents={(day, date) => (
                     <div className="flex flex-col items-center">
                       <span>{day}</span>
@@ -598,9 +612,12 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
                   className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#807730] focus:border-[#807730] bg-white"
                   placeholderText="Pasirinkite datą"
                   showPopperArrow={false}
-                  dayClassName={(date) => 
-                    `text-center ${isDateBooked(date) ? 'bg-red-100' : ''}`
-                  }
+                  dayClassName={(date) => {
+                    if (!isAfter(date, startOfToday())) {
+                      return 'text-gray-300 cursor-not-allowed';
+                    }
+                    return isDateBooked(date) ? 'text-red-400 line-through cursor-not-allowed' : 'text-green-600 cursor-pointer';
+                  }}
                   renderDayContents={(day, date) => (
                     <div className="flex flex-col items-center">
                       <span>{day}</span>

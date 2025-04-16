@@ -54,25 +54,25 @@
 
 /* Past dates */
 .react-datepicker__day--disabled {
-  @apply text-gray-400 hover:bg-transparent cursor-not-allowed !important;
+  @apply text-gray-300 hover:bg-transparent cursor-not-allowed !important;
 }
 
-/* Available dates */
-.react-datepicker__day:not(.react-datepicker__day--disabled):not(.react-datepicker__day--selected):not(.react-datepicker__day--in-range) {
-  @apply text-green-600 hover:bg-green-50;
+/* Available future dates */
+.react-datepicker__day:not(.react-datepicker__day--disabled):not(.react-datepicker__day--selected):not(.react-datepicker__day--in-range):not(.react-datepicker__day--excluded) {
+  @apply text-green-600 hover:bg-green-50 cursor-pointer;
 }
 
-/* Unavailable dates */
+/* Unavailable future dates */
 .react-datepicker__day--excluded {
-  @apply text-red-500 line-through cursor-not-allowed hover:bg-transparent;
+  @apply text-red-400 line-through cursor-not-allowed hover:bg-transparent !important;
 }
 
 .react-datepicker__day--selected {
-  @apply bg-[#807730] text-white hover:bg-[#6a6428] rounded-full;
+  @apply bg-[#807730] text-white hover:bg-[#6a6428] rounded-full cursor-pointer !important;
 }
 
 .react-datepicker__day--keyboard-selected {
-  @apply bg-[#807730] text-white hover:bg-[#6a6428] rounded-full;
+  @apply bg-[#807730] text-white hover:bg-[#6a6428] rounded-full cursor-pointer !important;
 }
 
 .react-datepicker__day--in-range {
