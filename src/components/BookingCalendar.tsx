@@ -5,7 +5,6 @@ import {
   startOfMonth,
   endOfMonth,
   eachDayOfInterval,
-  isSameMonth,
   isSameDay,
   isToday,
   isWithinInterval,
@@ -29,6 +28,8 @@ export function BookingCalendar({
 }: BookingCalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
+  const today = new Date();
+
   const nextMonth = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
   };
@@ -37,10 +38,12 @@ export function BookingCalendar({
     setCurrentMonth(addMonths(currentMonth, -1));
   };
 
-  const days = eachDayOfInterval({
+  const allDays = eachDayOfInterval({
     start: startOfMonth(currentMonth),
     end: endOfMonth(currentMonth)
   });
+
+  const days = allDays.filter(day => !isBefore(day, today));
 
   const isDateBooked = (date: Date) => {
     return bookedDates.some(bookedDate => isSameDay(bookedDate, date));
@@ -91,7 +94,6 @@ export function BookingCalendar({
           const isCheckOut = checkOut && isSameDay(day, checkOut);
           const isInDateRange = isInRange(day);
           const isCurrentDay = isToday(day);
-          const isPastDate = isBefore(day, new Date()) && !isToday(day);
 
           let className = `
             h-10 rounded-lg flex items-center justify-center text-sm relative
@@ -100,7 +102,6 @@ export function BookingCalendar({
             ${isCheckOut ? 'bg-green-500 text-white hover:bg-green-600' : ''}
             ${isInDateRange ? 'bg-green-100' : ''}
             ${isCurrentDay ? 'font-bold' : ''}
-            ${isPastDate ? 'text-gray-300 cursor-not-allowed' : ''}
           `;
 
           if (isCheckIn) {
@@ -113,8 +114,8 @@ export function BookingCalendar({
           return (
             <button
               key={day.toISOString()}
-              onClick={() => !isBooked && !isPastDate && onDateSelect(day)}
-              disabled={isBooked || isPastDate}
+              onClick={() => !isBooked && onDateSelect(day)}
+              disabled={isBooked}
               className={className}
             >
               {format(day, 'd')}
