@@ -16,6 +16,13 @@ export function ApartmentCard({ apartment, onSelect }: ApartmentCardProps) {
     navigate(`/${apartment.id}`, { state: { showBookingForm: true } });
   };
 
+  const getCapacityText = (apartmentId: string) => {
+    if (apartmentId === 'gintaras') {
+      return '12 asmenų';
+    }
+    return '2-4 asmenys';
+  };
+
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md group transform transition-transform duration-300 hover:scale-[1.02]">
       <div className="relative">
@@ -31,7 +38,7 @@ export function ApartmentCard({ apartment, onSelect }: ApartmentCardProps) {
         <h3 className="text-xl font-medium text-gray-900 mb-2">{apartment.name}</h3>
         <div className="flex items-center gap-2 text-gray-600 mb-4">
           <Users className="w-4 h-4" />
-          <span className="text-sm">12 asmenų</span>
+          <span className="text-sm">{getCapacityText(apartment.id)}</span>
         </div>
         
         <div className="flex items-center justify-between">

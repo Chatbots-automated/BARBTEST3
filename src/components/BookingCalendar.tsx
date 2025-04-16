@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
-import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isToday, isWithinInterval, isBefore } from 'date-fns';
+import {
+  format,
+  addMonths,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameMonth,
+  isSameDay,
+  isToday,
+  isWithinInterval,
+  isBefore
+} from 'date-fns';
 import { lt } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -10,7 +21,12 @@ interface BookingCalendarProps {
   onDateSelect: (date: Date) => void;
 }
 
-export function BookingCalendar({ bookedDates, checkIn, checkOut, onDateSelect }: BookingCalendarProps) {
+export function BookingCalendar({
+  bookedDates,
+  checkIn,
+  checkOut,
+  onDateSelect
+}: BookingCalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const nextMonth = () => {
@@ -23,7 +39,7 @@ export function BookingCalendar({ bookedDates, checkIn, checkOut, onDateSelect }
 
   const days = eachDayOfInterval({
     start: startOfMonth(currentMonth),
-    end: endOfMonth(currentMonth),
+    end: endOfMonth(currentMonth)
   });
 
   const isDateBooked = (date: Date) => {
@@ -37,6 +53,11 @@ export function BookingCalendar({ bookedDates, checkIn, checkOut, onDateSelect }
 
   const weekDays = ['P', 'A', 'T', 'K', 'P', 'Š', 'S'];
 
+  const formatCapitalizedMonth = (date: Date) => {
+    const raw = format(date, 'LLLL yyyy', { locale: lt });
+    return raw.charAt(0).toUpperCase() + raw.slice(1);
+  };
+
   return (
     <div className="bg-white rounded-lg shadow p-4">
       <div className="flex items-center justify-between mb-4">
@@ -44,7 +65,7 @@ export function BookingCalendar({ bookedDates, checkIn, checkOut, onDateSelect }
           <ChevronLeft className="w-5 h-5" />
         </button>
         <h2 className="text-lg font-semibold">
-          {format(currentMonth, 'LLLL yyyy', { locale: lt })}
+          {formatCapitalizedMonth(currentMonth)}
         </h2>
         <button onClick={nextMonth} className="p-2 hover:bg-gray-100 rounded-full">
           <ChevronRight className="w-5 h-5" />
@@ -110,10 +131,6 @@ export function BookingCalendar({ bookedDates, checkIn, checkOut, onDateSelect }
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-green-500 rounded" />
           <span className="text-sm text-gray-600">Pasirinktos datos</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-green-100 rounded" />
-          <span className="text-sm text-gray-600">Pasirinktas intervalas</span>
         </div>
       </div>
     </div>
