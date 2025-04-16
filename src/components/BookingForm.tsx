@@ -483,8 +483,7 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
                   <span className="font-medium">10€</span>
                 </div>
               )}
-              {apartment.id === 'pikulas' && bookingDetails.extra
-Bed && (
+              {apartment.id === 'pikulas'  && bookingDetails.extraBed && (
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600">Papildoma lova</span>
                   <span className="font-medium">15€</span>

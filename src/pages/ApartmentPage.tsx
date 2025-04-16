@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Calendar, Wifi, Coffee, Wind, Tv, MapPin, Users, Facebook, Instagram, Mail, Phone } from 'lucide-react';
+import { ArrowLeft, Calendar, Wifi, Coffee, Wind, Tv, MapPin, Users } from 'lucide-react';
 import { BookingForm } from '../components/BookingForm';
 import { Apartment } from '../types';
 import { supabase } from '../lib/supabase';
@@ -151,39 +151,51 @@ export function ApartmentPage() {
         </div>
       </div>
 
-      <footer className="bg-[#1f3325] text-white py-16">
+      <footer className="bg-[#1f3325] text-[#E5DFD3] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="space-y-12">
             <div>
-              <h3 className="text-xl font-semibold mb-4">Susisiekite su mumis</h3>
-              <div className="space-y-2">
-                <p>Kudronių Girios K. 12, Trakai</p>
-                <p className="flex items-center gap-2">
-                  <Phone className="w-4 h-4" />
-                  <a href="tel:+37061580004">+37061580004</a>
-                </p>
-                <p className="flex items-center gap-2">
-                  <Mail className="w-4 h-4" />
-                  <a href="mailto:info@girioshorizontas.lt">info@girioshorizontas.lt</a>
-                </p>
+              <h2 className="text-3xl font-medium mb-4">Susisiekite su mumis</h2>
+              <div className="space-y-2 text-lg">
+                <p>Adresas: Kudronių Girios K. 12, Trakai</p>
+                <p>+37061580004</p>
+                <p>info@girioshorizontas.lt</p>
               </div>
             </div>
             
             <div>
-              <h3 className="text-xl font-semibold mb-4">Sekite mus</h3>
-              <div className="flex space-x-4">
-                <a href="https://facebook.com" className="hover:text-gray-300 transition-colors">
-                  <Facebook className="w-6 h-6" />
+              <h2 className="text-3xl font-medium mb-4">Sekite mus</h2>
+              <div className="flex gap-4">
+                <a 
+                  href="https://facebook.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-[#E5DFD3] p-3 rounded-full hover:bg-white transition-colors"
+                >
+                  <img 
+                    src="https://i.imgur.com/CSUHLiZ.png" 
+                    alt="Facebook" 
+                    className="w-6 h-6"
+                  />
                 </a>
-                <a href="https://instagram.com" className="hover:text-gray-300 transition-colors">
-                  <Instagram className="w-6 h-6" />
+                <a 
+                  href="https://instagram.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-[#E5DFD3] p-3 rounded-full hover:bg-white transition-colors"
+                >
+                  <img 
+                    src="https://i.imgur.com/lTHtTh9.png" 
+                    alt="Instagram" 
+                    className="w-6 h-6"
+                  />
                 </a>
               </div>
             </div>
-          </div>
-          
-          <div className="mt-12 pt-8 border-t border-white/10 text-center">
-            <p>© {new Date().getFullYear()} Girios Horizontas – All rights reserved</p>
+
+            <div className="pt-8 border-t border-[#E5DFD3]/20 text-center">
+              <p>© {new Date().getFullYear()} Girios Horizontas - All rights reserved</p>
+            </div>
           </div>
         </div>
       </footer>
