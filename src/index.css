@@ -44,12 +44,7 @@
 }
 
 .react-datepicker__day {
-  @apply text-sm m-1 inline-block text-center transition-all duration-200 relative;
-}
-
-/* Price indicator */
-.react-datepicker__day::after {
-  @apply content-[attr(data-price)] absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-[10px] text-gray-500;
+  @apply text-sm m-1 inline-block text-center transition-all duration-200;
 }
 
 /* Past dates */
@@ -57,23 +52,18 @@
   @apply text-gray-300 hover:bg-transparent cursor-not-allowed !important;
 }
 
-/* Available future dates */
+/* Available dates */
 .react-datepicker__day:not(.react-datepicker__day--disabled):not(.react-datepicker__day--selected):not(.react-datepicker__day--in-range):not(.react-datepicker__day--excluded) {
-  @apply text-green-600 hover:bg-green-50 cursor-pointer;
+  @apply hover:bg-green-50 cursor-pointer;
 }
 
-/* Unavailable future dates */
+/* Unavailable dates */
 .react-datepicker__day--excluded {
   @apply text-red-400 line-through cursor-not-allowed hover:bg-transparent !important;
 }
 
 /* Selected date */
 .react-datepicker__day--selected {
-  @apply bg-[#807730] text-white hover:bg-[#6a6428] rounded-full cursor-pointer !important;
-}
-
-/* Keyboard selected date */
-.react-datepicker__day--keyboard-selected {
   @apply bg-[#807730] text-white hover:bg-[#6a6428] rounded-full cursor-pointer !important;
 }
 
@@ -97,7 +87,7 @@
 }
 
 .react-datepicker__day--today {
-  @apply font-bold border border-[#807730];
+  @apply font-bold;
 }
 
 .react-datepicker__navigation {
@@ -109,7 +99,7 @@
 }
 
 .react-datepicker-popper {
-  @apply z-[60] w-full max-w-[320px] mx-auto;
+  @apply z-[60];
 }
 
 /* Form validation styles */
@@ -119,15 +109,6 @@
 
 .form-error-message {
   @apply text-red-500 text-sm mt-1;
-}
-
-/* Confirmation message styles */
-.booking-confirmation {
-  @apply fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50;
-}
-
-.booking-confirmation-content {
-  @apply bg-white rounded-lg p-8 max-w-md w-full text-center;
 }
 
 /* Mobile responsiveness */

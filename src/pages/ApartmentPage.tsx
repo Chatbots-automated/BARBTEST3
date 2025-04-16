@@ -1,18 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { ArrowLeft, Calendar, Wifi, Coffee, Wind, Tv, MapPin, Users } from 'lucide-react';
-import { BookingForm } from '../components/BookingForm';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Calendar, Users, Coffee, Wind, Tv, MapPin, Info } from 'lucide-react';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import { format, differenceInDays, eachDayOfInterval, parseISO, isSameDay, isBefore, startOfToday } from 'date-fns';
+import { lt } from 'date-fns/locale';
 import { Apartment } from '../types';
 import { supabase } from '../lib/supabase';
 
 export function ApartmentPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
   const [apartment, setApartment] = useState<Apartment | null>(null);
-  const [showBookingForm, setShowBookingForm] = useState(location.state?.showBookingForm || false);
+  const [selectedDates, setSelectedDates] = useState<{
+    checkIn: Date | null;
+    checkOut: Date | null;
+  }>({
+    checkIn: null,
+    checkOut: null
+  });
+  const [numberOfGuests, setNumberOfGuests] = useState(2);
+  const [hasPets, setHasPets] = useState(false);
+  const [extraBed, setExtraBed] = useState(false);
+  const [email, setEmail] = useState('');
+  const [bookedDates, setBookedDates] = useState<Date[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [couponCode, setCouponCode] = useState('');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -41,6 +55,73 @@ export function ApartmentPage() {
 
     fetchApartment();
   }, [id]);
+
+  useEffect(() => {
+    async function fetchBookedDates() {
+      if (!apartment) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('bookings')
+          .select('check_in, check_out')
+          .eq('apartment_id', apartment.id);
+
+        if (error) throw error;
+
+        const allDates = data.flatMap(booking => {
+          const start = parseISO(booking.check_in);
+          const end = parseISO(booking.check_out);
+          return eachDayOfInterval({ start, end });
+        });
+
+        setBookedDates(allDates);
+      } catch (err) {
+        console.error('Error fetching booked dates:', err);
+      }
+    }
+
+    fetchBookedDates();
+  }, [apartment]);
+
+  const getDayClassName = (date: Date) => {
+    const today = startOfToday();
+    if (isBefore(date, today)) {
+      return 'text-gray-300 cursor-not-allowed';
+    }
+    if (isDateBooked(date)) {
+      return 'text-red-400 line-through cursor-not-allowed';
+    }
+    return '';
+  };
+
+  const isDateBooked = (date: Date) => {
+    return bookedDates.some(bookedDate => isSameDay(date, bookedDate));
+  };
+
+  const handleDateChange = (dates: [Date | null, Date | null]) => {
+    const [start, end] = dates;
+    setSelectedDates({
+      checkIn: start,
+      checkOut: end
+    });
+  };
+
+  const calculateTotalPrice = () => {
+    if (!selectedDates.checkIn || !selectedDates.checkOut || !apartment) return 0;
+    
+    const nights = differenceInDays(selectedDates.checkOut, selectedDates.checkIn);
+    let total = nights * apartment.price_per_night;
+    
+    if (hasPets) total += 10;
+    if (extraBed) total += 15;
+    
+    return total;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission
+  };
 
   if (isLoading) {
     return (
@@ -111,10 +192,6 @@ export function ApartmentPage() {
                   <span>Televizorius</span>
                 </div>
                 <div className="flex items-center text-gray-600">
-                  <Wifi className="w-5 h-5 mr-3" />
-                  <span>Bevielis internetas</span>
-                </div>
-                <div className="flex items-center text-gray-600">
                   <Users className="w-5 h-5 mr-3" />
                   <span>2-4 asmenys</span>
                 </div>
@@ -132,80 +209,112 @@ export function ApartmentPage() {
               <p className="text-gray-600 text-lg leading-relaxed">{apartment.description}</p>
             </div>
 
-            <div className="bg-white rounded-xl p-6 shadow-md">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <span className="text-3xl font-bold text-gray-900">€{apartment.price_per_night}</span>
-                  <span className="text-gray-600 ml-2">/ naktis</span>
+            <form onSubmit={handleSubmit} className="bg-white rounded-xl p-6 shadow-md space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Pasirinkite datas</h3>
+                <DatePicker
+                  selected={selectedDates.checkIn}
+                  onChange={handleDateChange}
+                  startDate={selectedDates.checkIn}
+                  endDate={selectedDates.checkOut}
+                  selectsRange
+                  inline
+                  monthsShown={1}
+                  locale={lt}
+                  minDate={new Date()}
+                  dayClassName={getDayClassName}
+                  excludeDates={bookedDates}
+                />
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Svečių skaičius</h3>
+                <div className="flex gap-4">
+                  {[1, 2, 3, 4].map(num => (
+                    <button
+                      key={num}
+                      type="button"
+                      onClick={() => setNumberOfGuests(num)}
+                      className={`w-12 h-12 rounded-full flex items-center justify-center border ${
+                        numberOfGuests === num
+                          ? 'bg-[#807730] text-white border-[#807730]'
+                          : 'border-gray-300 text-gray-700 hover:border-[#807730]'
+                      }`}
+                    >
+                      {num}
+                    </button>
+                  ))}
                 </div>
+              </div>
+
+              <div className="space-y-4">
+                <label className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={hasPets}
+                    onChange={(e) => setHasPets(e.target.checked)}
+                    className="w-5 h-5 rounded border-gray-300 text-[#807730] focus:ring-[#807730]"
+                  />
+                  <span className="text-gray-700">Augintinio mokestis (10€)</span>
+                </label>
+
+                {apartment.id === 'pikulas' && (
+                  <label className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={extraBed}
+                      onChange={(e) => setExtraBed(e.target.checked)}
+                      className="w-5 h-5 rounded border-gray-300 text-[#807730] focus:ring-[#807730]"
+                    />
+                    <span className="text-gray-700">Papildoma lova (15€)</span>
+                  </label>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  El. pašto adresas
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#807730] focus:border-[#807730]"
+                  placeholder="jusu@pastas.lt"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nuolaidos kodas
+                </label>
+                <input
+                  type="text"
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#807730] focus:border-[#807730]"
+                  placeholder="Įveskite kodą"
+                />
+              </div>
+
+              <div className="pt-6 border-t border-gray-200">
+                <div className="flex justify-between items-center mb-6">
+                  <span className="text-gray-600">Bendra suma</span>
+                  <span className="text-2xl font-bold">€{calculateTotalPrice()}</span>
+                </div>
+
                 <button
-                  onClick={() => setShowBookingForm(true)}
-                  className="px-8 py-3 bg-[#807730] text-white rounded-lg hover:bg-[#6a6428] transition-colors flex items-center gap-2"
+                  type="submit"
+                  className="w-full bg-[#807730] text-white py-4 rounded-xl font-medium hover:bg-[#6a6428] transition-colors"
                 >
-                  <Calendar className="w-5 h-5" />
                   Rezervuoti
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>
-
-      <footer className="bg-[#1f3325] text-[#E5DFD3] py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-12">
-            <div>
-              <h2 className="text-3xl font-medium mb-4">Susisiekite su mumis</h2>
-              <div className="space-y-2 text-lg">
-                <p>Adresas: Kudronių Girios K. 12, Trakai</p>
-                <p>+37061580004</p>
-                <p>info@girioshorizontas.lt</p>
-              </div>
-            </div>
-            
-            <div>
-              <h2 className="text-3xl font-medium mb-4">Sekite mus</h2>
-              <div className="flex gap-4">
-                <a 
-                  href="https://facebook.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="bg-[#E5DFD3] p-3 rounded-full hover:bg-white transition-colors"
-                >
-                  <img 
-                    src="https://i.imgur.com/CSUHLiZ.png" 
-                    alt="Facebook" 
-                    className="w-6 h-6"
-                  />
-                </a>
-                <a 
-                  href="https://instagram.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="bg-[#E5DFD3] p-3 rounded-full hover:bg-white transition-colors"
-                >
-                  <img 
-                    src="https://i.imgur.com/lTHtTh9.png" 
-                    alt="Instagram" 
-                    className="w-6 h-6"
-                  />
-                </a>
-              </div>
-            </div>
-
-            <div className="pt-8 border-t border-[#E5DFD3]/20 text-center">
-              <p>© {new Date().getFullYear()} Girios Horizontas - All rights reserved</p>
-            </div>
-          </div>
-        </div>
-      </footer>
-
-      {showBookingForm && (
-        <BookingForm
-          apartment={apartment}
-          onClose={() => setShowBookingForm(false)}
-        />
-      )}
     </div>
   );
 }

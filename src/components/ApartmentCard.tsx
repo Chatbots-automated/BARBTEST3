@@ -5,16 +5,10 @@ import { Apartment } from '../types';
 
 interface ApartmentCardProps {
   apartment: Apartment;
-  onSelect: (apartment: Apartment) => void;
 }
 
-export function ApartmentCard({ apartment, onSelect }: ApartmentCardProps) {
+export function ApartmentCard({ apartment }: ApartmentCardProps) {
   const navigate = useNavigate();
-
-  const handleBooking = (e: React.MouseEvent) => {
-    e.preventDefault();
-    navigate(`/${apartment.id}`, { state: { showBookingForm: true } });
-  };
 
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md group transform transition-transform duration-300 hover:scale-[1.02]">
@@ -41,7 +35,7 @@ export function ApartmentCard({ apartment, onSelect }: ApartmentCardProps) {
           </div>
           
           <button
-            onClick={handleBooking}
+            onClick={() => navigate(`/${apartment.id}`)}
             className="px-6 py-2 bg-[#4A5859] text-white rounded-lg hover:bg-[#3A4445] transition-colors transform hover:scale-105 duration-200 flex items-center gap-2"
           >
             Rezervuoti
