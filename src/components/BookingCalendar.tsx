@@ -8,7 +8,8 @@ import {
   isSameDay,
   isToday,
   isWithinInterval,
-  isBefore
+  isBefore,
+  isPast
 } from 'date-fns';
 import { lt } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -27,7 +28,6 @@ export function BookingCalendar({
   onDateSelect
 }: BookingCalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
-
   const today = new Date();
 
   const nextMonth = () => {
@@ -42,8 +42,6 @@ export function BookingCalendar({
     start: startOfMonth(currentMonth),
     end: endOfMonth(currentMonth)
   });
-
-  const days = allDays.filter(day => !isBefore(day, today));
 
   const isDateBooked = (date: Date) => {
     return bookedDates.some(bookedDate => isSameDay(bookedDate, date));
@@ -88,18 +86,22 @@ export function BookingCalendar({
           <div key={`empty-${index}`} className="h-10" />
         ))}
 
-        {days.map(day => {
+        {allDays.map(day => {
           const isBooked = isDateBooked(day);
+          const isPastDate = isPast(day) && !isSameDay(day, today);
           const isCheckIn = checkIn && isSameDay(day, checkIn);
           const isCheckOut = checkOut && isSameDay(day, checkOut);
           const isInDateRange = isInRange(day);
           const isCurrentDay = isToday(day);
+          const isAvailable = !isBooked && !isPastDate;
 
           let className = `
             h-10 rounded-lg flex items-center justify-center text-sm relative
-            ${isBooked ? 'bg-red-100 text-red-600 cursor-not-allowed' : 'hover:bg-gray-100'}
-            ${isCheckIn ? 'bg-green-500 text-white hover:bg-green-600' : ''}
-            ${isCheckOut ? 'bg-green-500 text-white hover:bg-green-600' : ''}
+            ${isPastDate ? 'text-gray-300 cursor-not-allowed' : ''}
+            ${isBooked ? 'bg-red-100 text-red-600 cursor-not-allowed' : ''}
+            ${isAvailable && !isCheckIn && !isCheckOut ? 'text-green-600 hover:bg-green-50 cursor-pointer' : ''}
+            ${isCheckIn ? 'bg-[#807730] text-white hover:bg-[#6a632a]' : ''}
+            ${isCheckOut ? 'bg-[#807730] text-white hover:bg-[#6a632a]' : ''}
             ${isInDateRange ? 'bg-green-100' : ''}
             ${isCurrentDay ? 'font-bold' : ''}
           `;
@@ -114,8 +116,8 @@ export function BookingCalendar({
           return (
             <button
               key={day.toISOString()}
-              onClick={() => !isBooked && onDateSelect(day)}
-              disabled={isBooked}
+              onClick={() => !isBooked && !isPastDate && onDateSelect(day)}
+              disabled={isBooked || isPastDate}
               className={className}
             >
               {format(day, 'd')}
@@ -130,8 +132,12 @@ export function BookingCalendar({
           <span className="text-sm text-gray-600">Užimta</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-green-500 rounded" />
+          <div className="w-4 h-4 bg-[#807730] rounded" />
           <span className="text-sm text-gray-600">Pasirinktos datos</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-green-100 rounded" />
+          <span className="text-sm text-gray-600">Laisvos datos</span>
         </div>
       </div>
     </div>

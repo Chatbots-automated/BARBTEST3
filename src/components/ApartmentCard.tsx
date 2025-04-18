@@ -49,7 +49,7 @@ export function ApartmentCard({ apartment, onSelect }: ApartmentCardProps) {
           
           <button
             onClick={handleBooking}
-            className="px-6 py-2 bg-[#4A5859] text-white rounded-lg hover:bg-[#3A4445] transition-colors transform hover:scale-105 duration-200 flex items-center gap-2"
+            className="px-6 py-2 bg-[#807730] text-white rounded-lg hover:bg-[#6a632a] transition-colors transform hover:scale-105 duration-200 flex items-center gap-2"
           >
             Rezervuoti
           </button>
