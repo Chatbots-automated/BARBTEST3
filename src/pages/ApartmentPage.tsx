@@ -147,8 +147,8 @@ export function ApartmentPage() {
       'line_items[0][quantity]': '1',
       'metadata[apartmentId]': apartment.id,
       'metadata[apartmentName]': getApartmentBaseName(apartment.name),
-      'metadata[checkIn]': checkIn.toISOString(),
-      'metadata[checkOut]': checkOut.toISOString(),
+      'metadata[checkIn]': format(checkIn, 'yyyy-MM-dd'),
+      'metadata[checkOut]': format(checkOut, 'yyyy-MM-dd'),
       'metadata[email]': email,
       'metadata[fullName]': fullName,
       'metadata[phoneNumber]': phoneNumber,
@@ -272,6 +272,8 @@ export function ApartmentPage() {
                 checkIn={checkIn}
                 checkOut={checkOut}
                 onDateSelect={handleDateSelect}
+                numberOfGuests={numberOfGuests}
+                onGuestsChange={setNumberOfGuests}
               />
 
               <div className="space-y-4">
@@ -310,7 +312,7 @@ export function ApartmentPage() {
                     className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary ${
                       emailError ? 'border-red-500' : 'border-gray-300'
                     }`}
-                    placeholder="el paštas"
+                    placeholder="El paštas"
                   />
                   {emailError && (
                     <p className="text-red-500 text-sm mt-1">Prašome užpildyti šį laukelį</p>
@@ -345,15 +347,18 @@ export function ApartmentPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Svečių skaičius
                   </label>
-                  <select
-                    value={numberOfGuests}
-                    onChange={(e) => setNumberOfGuests(parseInt(e.target.value))}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                  >
-                    {[1, 2, 3, 4].map(num => (
-                      <option key={num} value={num}>{num} {num === 1 ? 'svečias' : 'svečiai'}</option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <Users className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <input
+                      type="number"
+                      min="1"
+                      max="12"
+                      value={numberOfGuests}
+                      onChange={(e) => setNumberOfGuests(parseInt(e.target.value))}
+                      className="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                      placeholder="Įveskite svečių skaičių"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-2">
