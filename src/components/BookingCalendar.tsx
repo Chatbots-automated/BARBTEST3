@@ -132,10 +132,6 @@ export function BookingCalendar({
           <span className="text-sm text-gray-600">Užimta</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-[#807730] rounded" />
-          <span className="text-sm text-gray-600">Pasirinktos datos</span>
-        </div>
-        <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-green-100 rounded" />
           <span className="text-sm text-gray-600">Laisvos datos</span>
         </div>

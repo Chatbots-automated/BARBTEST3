@@ -20,7 +20,7 @@ export function ApartmentCard({ apartment, onSelect }: ApartmentCardProps) {
     if (apartmentId === 'gintaras') {
       return '12 asmenų';
     }
-    return '2-4 asmenys';
+    return '';
   };
 
   return (
