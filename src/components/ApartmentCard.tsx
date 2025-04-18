@@ -43,6 +43,7 @@ export function ApartmentCard({ apartment, onSelect }: ApartmentCardProps) {
         
         <div className="flex items-center justify-between">
           <div>
+            <span className="text-gray-600 text-sm">Nuo </span>
             <span className="text-xl font-medium">€{apartment.price_per_night}</span>
             <span className="text-gray-600 text-sm ml-1">/ naktis</span>
           </div>

@@ -48,21 +48,7 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#F5F2EA]">
-      {/* Hero Section */}
-      <section className="pt-32 px-4 pb-16 bg-gradient-to-b from-[#F5F2EA] to-white">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Atraskite ramybę Girios Horizonte
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Prabangūs apartamentai ir nameliai, apsupti žalios gamtos, 
-            sukurti jūsų tobulam poilsiui Trakų apylinkėse.
-          </p>
-        </div>
-      </section>
-
-      {/* Apartments Section */}
-      <section className="px-4 pb-24">
+      <section className="pt-32 px-4 pb-24">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
             Mūsų Apartamentai
@@ -93,8 +79,7 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[#2B3A2D] text-[#E3D5C9] py-16">
+      <footer className="bg-[#3D4B3F] text-[#E3D5C9] py-16">
         <div className="max-w-7xl mx-auto px-4">
           <div className="space-y-8">
             <div>

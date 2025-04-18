@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Calendar, Users, MapPin, Info } from 'lucide-react';
+import { ArrowLeft, Calendar, Users, MapPin, Info, Phone } from 'lucide-react';
 import { BookingCalendar } from '../components/BookingCalendar';
 import { Apartment } from '../types';
 import { supabase } from '../lib/supabase';
@@ -20,8 +20,10 @@ export function ApartmentPage() {
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [fullNameError, setFullNameError] = useState(false);
+  const [phoneNumberError, setPhoneNumberError] = useState(false);
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discount_percent: number } | null>(null);
 
@@ -115,6 +117,13 @@ export function ApartmentPage() {
     } else {
       setFullNameError(false);
     }
+
+    if (!phoneNumber.trim()) {
+      setPhoneNumberError(true);
+      isValid = false;
+    } else {
+      setPhoneNumberError(false);
+    }
     
     return isValid;
   };
@@ -142,6 +151,7 @@ export function ApartmentPage() {
       'metadata[checkOut]': checkOut.toISOString(),
       'metadata[email]': email,
       'metadata[fullName]': fullName,
+      'metadata[phoneNumber]': phoneNumber,
       'metadata[numberOfGuests]': numberOfGuests.toString(),
       'metadata[hasPets]': hasPets ? 'true' : 'false',
       'metadata[extraBed]': extraBed ? 'true' : 'false',
@@ -251,6 +261,7 @@ export function ApartmentPage() {
             <div className="bg-white rounded-xl p-6 shadow-md space-y-6">
               <div className="flex items-center justify-between">
                 <div>
+                  <span className="text-gray-600 text-sm">Nuo </span>
                   <span className="text-3xl font-bold text-gray-900">€{apartment.price_per_night}</span>
                   <span className="text-gray-600 ml-2">/ naktis</span>
                 </div>
@@ -308,6 +319,30 @@ export function ApartmentPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Telefono numeris
+                  </label>
+                  <div className="relative">
+                    <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <input
+                      type="tel"
+                      value={phoneNumber}
+                      onChange={(e) => {
+                        setPhoneNumber(e.target.value);
+                        setPhoneNumberError(false);
+                      }}
+                      className={`w-full pl-12 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary ${
+                        phoneNumberError ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                      placeholder="Telefono numeris"
+                    />
+                  </div>
+                  {phoneNumberError && (
+                    <p className="text-red-500 text-sm mt-1">Prašome užpildyti šį laukelį</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Svečių skaičius
                   </label>
                   <select
@@ -348,7 +383,7 @@ export function ApartmentPage() {
                 {checkIn && checkOut && (
                   <div className="p-4 bg-gray-50 rounded-lg space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Kaina už naktį</span>
+                      <span className="text-gray-600">Nuo </span>
                       <span>€{apartment.price_per_night}</span>
                     </div>
                     <div className="flex justify-between">
@@ -376,7 +411,7 @@ export function ApartmentPage() {
 
                 <button
                   onClick={handleBooking}
-                  disabled={!checkIn || !checkOut || !email || !fullName}
+                  disabled={!checkIn || !checkOut || !email || !fullName || !phoneNumber}
                   className="w-full bg-[#807730] hover:bg-[#6a632a] text-white py-3 rounded-lg font-medium transition-colors disabled:opacity-50"
                 >
                   Rezervuoti
