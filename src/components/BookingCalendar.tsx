@@ -33,6 +33,7 @@ export function BookingCalendar({
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [rulesAccepted, setRulesAccepted] = useState(false);
   const [showRules, setShowRules] = useState(false);
+  const [showError, setShowError] = useState(false);
   const today = new Date();
   const { language, t } = useLanguage();
 
@@ -69,9 +70,18 @@ export function BookingCalendar({
 
   const handleRulesAcceptanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRulesAccepted(e.target.checked);
+    setShowError(false);
     if (onRulesAcceptanceChange) {
       onRulesAcceptanceChange(e.target.checked);
     }
+  };
+
+  const handleDateSelect = (date: Date) => {
+    if (!rulesAccepted) {
+      setShowError(true);
+      return;
+    }
+    onDateSelect(date);
   };
 
   if (showRules) {
@@ -270,7 +280,7 @@ export function BookingCalendar({
           return (
             <button
               key={day.toISOString()}
-              onClick={() => !isBooked && !isPastDate && onDateSelect(day)}
+              onClick={() => !isBooked && !isPastDate && handleDateSelect(day)}
               disabled={isBooked || isPastDate}
               className={className}
             >
@@ -298,10 +308,14 @@ export function BookingCalendar({
             id="rules-acceptance"
             checked={rulesAccepted}
             onChange={handleRulesAcceptanceChange}
-            className="mt-1 w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
+            className={`mt-1 w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary ${
+              showError ? 'border-red-500' : ''
+            }`}
           />
           <div>
-            <label htmlFor="rules-acceptance" className="text-gray-700 font-medium">
+            <label htmlFor="rules-acceptance" className={`text-gray-700 font-medium ${
+              showError ? 'text-red-500' : ''
+            }`}>
               {t('rules.acceptance')}
             </label>
             <button
@@ -312,6 +326,11 @@ export function BookingCalendar({
               <Info className="w-4 h-4" />
               {t('view.rules')}
             </button>
+            {showError && (
+              <p className="text-red-500 text-sm mt-1">
+                Prašome susipažinti ir sutikti su taisyklėmis prieš tęsiant
+              </p>
+            )}
           </div>
         </div>
       </div>
