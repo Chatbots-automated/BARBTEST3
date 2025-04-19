@@ -28,6 +28,7 @@ export function ApartmentPage() {
   const [phoneNumberError, setPhoneNumberError] = useState(false);
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discount_percent: number } | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -126,6 +127,17 @@ export function ApartmentPage() {
     } else {
       setPhoneNumberError(false);
     }
+
+    if (!checkIn || !checkOut) {
+      setFormError("Prašome pasirinkti atvykimo ir išvykimo datas");
+      isValid = false;
+    } else {
+      setFormError(null);
+    }
+    
+    if (!isValid) {
+      setFormError("Prašome užpildyti visus laukelius");
+    }
     
     return isValid;
   };
@@ -135,7 +147,7 @@ export function ApartmentPage() {
       return;
     }
 
-    if (!checkIn || !checkOut || !apartment) return;
+    if (!apartment) return;
 
     const totalPrice = calculateTotalPrice();
     const params = new URLSearchParams({
@@ -149,8 +161,8 @@ export function ApartmentPage() {
       'line_items[0][quantity]': '1',
       'metadata[apartmentId]': apartment.id,
       'metadata[apartmentName]': getApartmentBaseName(apartment.name),
-      'metadata[checkIn]': format(checkIn, 'yyyy-MM-dd'),
-      'metadata[checkOut]': format(checkOut, 'yyyy-MM-dd'),
+      'metadata[checkIn]': checkIn ? format(checkIn, 'yyyy-MM-dd') : '',
+      'metadata[checkOut]': checkOut ? format(checkOut, 'yyyy-MM-dd') : '',
       'metadata[email]': email,
       'metadata[fullName]': fullName,
       'metadata[phoneNumber]': phoneNumber,
@@ -287,6 +299,7 @@ export function ApartmentPage() {
                     onChange={(e) => {
                       setFullName(e.target.value);
                       setFullNameError(false);
+                      setFormError(null);
                     }}
                     className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary ${
                       fullNameError ? 'border-red-500' : 'border-gray-300'
@@ -308,6 +321,7 @@ export function ApartmentPage() {
                     onChange={(e) => {
                       setEmail(e.target.value);
                       setEmailError(false);
+                      setFormError(null);
                     }}
                     className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary ${
                       emailError ? 'border-red-500' : 'border-gray-300'
@@ -331,6 +345,7 @@ export function ApartmentPage() {
                       onChange={(e) => {
                         setPhoneNumber(e.target.value);
                         setPhoneNumberError(false);
+                        setFormError(null);
                       }}
                       className={`w-full pl-12 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary ${
                         phoneNumberError ? 'border-red-500' : 'border-gray-300'
@@ -413,10 +428,15 @@ export function ApartmentPage() {
                   </div>
                 )}
 
+                {formError && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                    {formError}
+                  </div>
+                )}
+
                 <button
                   onClick={handleBooking}
-                  disabled={!checkIn || !checkOut || !email || !fullName || !phoneNumber}
-                  className="w-full bg-[#807730] hover:bg-[#6a632a] text-white py-3 rounded-lg font-medium transition-colors disabled:opacity-50"
+                  className="w-full bg-[#807730] hover:bg-[#6a632a] text-white py-3 rounded-lg font-medium transition-colors"
                 >
                   {t('book.now')}
                 </button>
