@@ -247,8 +247,8 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
 
       const params = new URLSearchParams({
         mode: 'payment',
-        success_url: `${window.location.origin}/success`,
-        cancel_url: `${window.location.origin}/cancel`,
+        success_url: `${window.location.origin}/success?apartmentName=${encodeURIComponent(apartment.name)}&checkIn=${checkIn.toISOString()}&checkOut=${checkOut.toISOString()}&email=${encodeURIComponent(guestEmail)}&guestName=${encodeURIComponent(guestName)}&country=${encodeURIComponent(country)}&phoneNumber=${encodeURIComponent(phoneNumber)}&numberOfGuests=${numberOfGuests}&hasPets=${hasPets}&extraBed=${extraBed}&price=${totalPrice}`,
+        cancel_url: `${window.location.origin}/fail`,
         customer_email: guestEmail,
         'line_items[0][price_data][currency]': 'eur',
         'line_items[0][price_data][product_data][name]': apartment.name,
@@ -266,7 +266,6 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
         'metadata[hasPets]': hasPets ? 'true' : 'false',
         'metadata[extraBed]': extraBed ? 'true' : 'false',
         'metadata[price]': totalPrice.toString(),
-        'metadata[acceptedRules]': 'true',
       });
 
       if (appliedCoupon) {
@@ -479,6 +478,7 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
                   <span className="font-medium">15€</span>
                 </div>
               )}
+            
             </div>
 
             <div className="border-t border-gray-200 pt-4">
