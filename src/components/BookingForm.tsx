@@ -479,6 +479,7 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
                 </div>
               )}
             
+            
             </div>
 
             <div className="border-t border-gray-200 pt-4">
@@ -602,10 +603,11 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
                 <input
                   type="number"
                   min="1"
-                  max="4"
-                  value={bookingDetails.numberOfGuests || 2}
+                  max="12"
+                  value={bookingDetails.numberOfGuests}
                   onChange={(e) => setBookingDetails({ ...bookingDetails, numberOfGuests: parseInt(e.target.value) })}
                   className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
+                  style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
                 />
               </div>
             </div>

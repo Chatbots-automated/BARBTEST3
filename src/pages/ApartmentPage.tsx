@@ -147,9 +147,21 @@ export function ApartmentPage() {
       return;
     }
 
-    if (!apartment) return;
+    if (!apartment || !checkIn || !checkOut) return;
 
-    const totalPrice = calculateTotalPrice();
+    const numberOfNights = differenceInDays(checkOut, checkIn);
+    let totalPrice = numberOfNights * apartment.price_per_night;
+    
+    // Add pet fee if applicable
+    if (hasPets) {
+      totalPrice += 10;
+    }
+    
+    // Add extra bed fee if applicable for Pikulas apartment
+    if (apartment.id === 'pikulas' && extraBed) {
+      totalPrice += 15;
+    }
+
     const params = new URLSearchParams({
       mode: 'payment',
       success_url: `${window.location.origin}/success`,
@@ -159,17 +171,22 @@ export function ApartmentPage() {
       'line_items[0][price_data][product_data][name]': apartment.name,
       'line_items[0][price_data][unit_amount]': Math.round(totalPrice * 100).toString(),
       'line_items[0][quantity]': '1',
-      'metadata[apartmentId]': apartment.id,
-      'metadata[apartmentName]': getApartmentBaseName(apartment.name),
-      'metadata[checkIn]': checkIn ? format(checkIn, 'yyyy-MM-dd') : '',
-      'metadata[checkOut]': checkOut ? format(checkOut, 'yyyy-MM-dd') : '',
-      'metadata[email]': email,
-      'metadata[fullName]': fullName,
-      'metadata[phoneNumber]': phoneNumber,
-      'metadata[numberOfGuests]': numberOfGuests.toString(),
-      'metadata[hasPets]': hasPets ? 'true' : 'false',
-      'metadata[extraBed]': extraBed ? 'true' : 'false',
-      'metadata[price]': totalPrice.toString(),
+      'metadata[apartment_id]': apartment.id,
+      'metadata[apartment_name]': getApartmentBaseName(apartment.name),
+      'metadata[check_in]': format(checkIn, 'yyyy-MM-dd'),
+      'metadata[check_out]': format(checkOut, 'yyyy-MM-dd'),
+      'metadata[nights]': numberOfNights.toString(),
+      'metadata[price_per_night]': apartment.price_per_night.toString(),
+      'metadata[base_price]': (numberOfNights * apartment.price_per_night).toString(),
+      'metadata[has_pets]': hasPets ? 'true' : 'false',
+      'metadata[pet_fee]': hasPets ? '10' : '0',
+      'metadata[has_extra_bed]': extraBed ? 'true' : 'false',
+      'metadata[extra_bed_fee]': (apartment.id === 'pikulas' && extraBed) ? '15' : '0',
+      'metadata[total_price]': totalPrice.toString(),
+      'metadata[guest_name]': fullName,
+      'metadata[guest_email]': email,
+      'metadata[guest_phone]': phoneNumber,
+      'metadata[number_of_guests]': numberOfGuests.toString(),
     });
 
     try {
@@ -370,7 +387,7 @@ export function ApartmentPage() {
                       max="12"
                       value={numberOfGuests}
                       onChange={(e) => setNumberOfGuests(parseInt(e.target.value))}
-                      className="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                      className="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                     />
                   </div>
                 </div>
@@ -394,7 +411,7 @@ export function ApartmentPage() {
                         onChange={(e) => setExtraBed(e.target.checked)}
                         className="rounded border-gray-300 text-primary focus:ring-primary"
                       />
-                      <span>{t('extra.bed')} (+15€)</span>
+                      <span>Papildoma lova (+15€)</span>
                     </label>
                   )}
                 </div>
@@ -417,7 +434,7 @@ export function ApartmentPage() {
                     )}
                     {apartment.id === 'pikulas' && extraBed && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">{t('extra.bed.charge')}</span>
+                        <span className="text-gray-600">Papildoma lova</span>
                         <span>€15</span>
                       </div>
                     )}
