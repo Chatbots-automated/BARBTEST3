@@ -13,6 +13,7 @@ import {
 } from 'date-fns';
 import { lt } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface BookingCalendarProps {
   bookedDates: Date[];
@@ -29,6 +30,7 @@ export function BookingCalendar({
 }: BookingCalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const today = new Date();
+  const { language, t } = useLanguage();
 
   const nextMonth = () => {
     setCurrentMonth(addMonths(currentMonth, 1));
@@ -52,10 +54,12 @@ export function BookingCalendar({
     return isWithinInterval(date, { start: checkIn, end: checkOut });
   };
 
-  const weekDays = ['P', 'A', 'T', 'K', 'P', 'Š', 'S'];
+  const weekDays = language === 'en' 
+    ? ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+    : ['P', 'A', 'T', 'K', 'P', 'Š', 'S'];
 
   const formatCapitalizedMonth = (date: Date) => {
-    const raw = format(date, 'LLLL yyyy', { locale: lt });
+    const raw = format(date, 'LLLL yyyy', { locale: language === 'lt' ? lt : undefined });
     return raw.charAt(0).toUpperCase() + raw.slice(1);
   };
 
@@ -107,10 +111,10 @@ export function BookingCalendar({
           `;
 
           if (isCheckIn) {
-            className += ' after:content-["Atvykimas"] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:text-xs after:whitespace-nowrap after:mt-1';
+            className += ` after:content-["${t('arrival')}"] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:text-xs after:whitespace-nowrap after:mt-1`;
           }
           if (isCheckOut) {
-            className += ' after:content-["Išvykimas"] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:text-xs after:whitespace-nowrap after:mt-1';
+            className += ` after:content-["${t('departure')}"] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:text-xs after:whitespace-nowrap after:mt-1`;
           }
 
           return (
@@ -129,11 +133,11 @@ export function BookingCalendar({
       <div className="mt-8 flex gap-4">
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-red-100 rounded" />
-          <span className="text-sm text-gray-600">Užimta</span>
+          <span className="text-sm text-gray-600">{t('booked')}</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-green-100 rounded" />
-          <span className="text-sm text-gray-600">Laisvos datos</span>
+          <span className="text-sm text-gray-600">{t('available')}</span>
         </div>
       </div>
     </div>

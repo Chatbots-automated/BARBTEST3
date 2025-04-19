@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users } from 'lucide-react';
 import { Apartment } from '../types';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface ApartmentCardProps {
   apartment: Apartment;
@@ -10,6 +11,7 @@ interface ApartmentCardProps {
 
 export function ApartmentCard({ apartment, onSelect }: ApartmentCardProps) {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleBooking = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -18,7 +20,7 @@ export function ApartmentCard({ apartment, onSelect }: ApartmentCardProps) {
 
   const getCapacityText = (apartmentId: string) => {
     if (apartmentId === 'gintaras') {
-      return '12 asmenų';
+      return '12 ' + t('guests');
     }
     return '';
   };
@@ -43,16 +45,16 @@ export function ApartmentCard({ apartment, onSelect }: ApartmentCardProps) {
         
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-gray-600 text-sm">Nuo </span>
+            <span className="text-gray-600 text-sm">{t('from')} </span>
             <span className="text-xl font-medium">€{apartment.price_per_night}</span>
-            <span className="text-gray-600 text-sm ml-1">/ naktis</span>
+            <span className="text-gray-600 text-sm ml-1">/ {t('per.night')}</span>
           </div>
           
           <button
             onClick={handleBooking}
             className="px-6 py-2 bg-[#807730] text-white rounded-lg hover:bg-[#6a632a] transition-colors transform hover:scale-105 duration-200 flex items-center gap-2"
           >
-            Rezervuoti
+            {t('book.now')}
           </button>
         </div>
       </div>

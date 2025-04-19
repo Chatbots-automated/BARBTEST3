@@ -4,8 +4,10 @@ import { BookingForm } from '../components/BookingForm';
 import { Apartment } from '../types';
 import { supabase } from '../lib/supabase';
 import { Facebook, Instagram } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export function HomePage() {
+  const { t } = useLanguage();
   const [selectedApartment, setSelectedApartment] = useState<Apartment | null>(null);
   const [apartments, setApartments] = useState<Apartment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -51,7 +53,7 @@ export function HomePage() {
       <section className="pt-32 px-4 pb-24">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-            Mūsų Apartamentai
+            {t('our.apartments')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {isLoading ? (
@@ -83,16 +85,16 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="space-y-8">
             <div>
-              <h2 className="text-4xl font-light mb-6">Susisiekite su mumis</h2>
+              <h2 className="text-4xl font-light mb-6">{t('contact.us')}</h2>
               <div className="space-y-2">
-                <p>Adresas: Kudrionių Girios k. 12, Trakai</p>
+                <p>{t('address')}: Kudrionių Girios k. 12, Trakai</p>
                 <p>+37061580004</p>
                 <p>info@girioshorizontas.lt</p>
               </div>
             </div>
 
             <div>
-              <h2 className="text-4xl font-light mb-6">Sekite mus</h2>
+              <h2 className="text-4xl font-light mb-6">{t('follow.us')}</h2>
               <div className="flex gap-4">
                 <a 
                   href="https://facebook.com" 
@@ -114,7 +116,7 @@ export function HomePage() {
             </div>
 
             <div className="pt-8 border-t border-[#E3D5C9]/20">
-              <p className="text-sm">© 2025 Girios Horizontas - All rights reserved</p>
+              <p className="text-sm">© 2025 Girios Horizontas - {t('all.rights.reserved')}</p>
             </div>
           </div>
         </div>

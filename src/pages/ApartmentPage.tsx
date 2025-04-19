@@ -5,10 +5,12 @@ import { BookingCalendar } from '../components/BookingCalendar';
 import { Apartment } from '../types';
 import { supabase } from '../lib/supabase';
 import { format, differenceInDays, eachDayOfInterval, parseISO, isSameDay, subDays, isAfter } from 'date-fns';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export function ApartmentPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [apartment, setApartment] = useState<Apartment | null>(null);
   const [bookedDates, setBookedDates] = useState<Date[]>([]);
   const [checkIn, setCheckIn] = useState<Date | null>(null);
@@ -51,7 +53,7 @@ export function ApartmentPage() {
           .single();
 
         if (error) throw error;
-        if (!data) throw new Error('Apartamentas nerastas');
+        if (!data) throw new Error(t('apartment.not.found'));
         
         setApartment(data);
 
@@ -71,14 +73,14 @@ export function ApartmentPage() {
         setBookedDates(allDates);
       } catch (err) {
         console.error('Error fetching apartment:', err);
-        setError('Nepavyko užkrauti apartamento informacijos');
+        setError('Failed to load apartment details');
       } finally {
         setIsLoading(false);
       }
     }
 
     fetchApartment();
-  }, [id]);
+  }, [id, t]);
 
   const handleDateSelect = (date: Date) => {
     if (!checkIn || (checkIn && checkOut)) {
@@ -92,7 +94,7 @@ export function ApartmentPage() {
         if (!hasBookedDates) {
           setCheckOut(date);
         } else {
-          setError('Pasirinktas intervalas turi užimtų datų');
+          setError(t('dates.unavailable'));
         }
       } else {
         setCheckIn(date);
@@ -172,7 +174,7 @@ export function ApartmentPage() {
       window.location.href = session.url;
     } catch (err) {
       console.error('Error creating checkout session:', err);
-      setError('Nepavyko sukurti užsakymo');
+      setError(t('booking.error'));
     }
   };
 
@@ -213,13 +215,13 @@ export function ApartmentPage() {
     return (
       <div className="pt-24 min-h-screen bg-[#F5F2EA] flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-md text-center">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Klaida</h2>
-          <p className="text-gray-600">{error || 'Apartamentas nerastas'}</p>
+          <h2 className="text-2xl font-bold text-red-600 mb-4">{t('error')}</h2>
+          <p className="text-gray-600">{error || t('apartment.not.found')}</p>
           <button
             onClick={() => navigate('/')}
             className="mt-6 px-6 py-2 bg-[#807730] text-white rounded hover:bg-[#6a632a] transition-colors"
           >
-            Grįžti į pradžią
+            {t('back.to.apartments')}
           </button>
         </div>
       </div>
@@ -236,7 +238,7 @@ export function ApartmentPage() {
           className="flex items-center text-gray-600 hover:text-gray-900 mb-8 transition-colors"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
-          Grįžti į visus apartamentus
+          {t('back.to.apartments')}
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -261,9 +263,9 @@ export function ApartmentPage() {
             <div className="bg-white rounded-xl p-6 shadow-md space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-gray-600 text-sm">Nuo </span>
+                  <span className="text-gray-600 text-sm">{t('from')} </span>
                   <span className="text-3xl font-bold text-gray-900">€{apartment.price_per_night}</span>
-                  <span className="text-gray-600 ml-2">/ naktis</span>
+                  <span className="text-gray-600 ml-2">/ {t('per.night')}</span>
                 </div>
               </div>
 
@@ -272,14 +274,12 @@ export function ApartmentPage() {
                 checkIn={checkIn}
                 checkOut={checkOut}
                 onDateSelect={handleDateSelect}
-                numberOfGuests={numberOfGuests}
-                onGuestsChange={setNumberOfGuests}
               />
 
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Vardas Pavardė
+                    {t('full.name')}
                   </label>
                   <input
                     type="text"
@@ -291,16 +291,16 @@ export function ApartmentPage() {
                     className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary ${
                       fullNameError ? 'border-red-500' : 'border-gray-300'
                     }`}
-                    placeholder="Įveskite vardą ir pavardę"
+                    placeholder={t('enter.name')}
                   />
                   {fullNameError && (
-                    <p className="text-red-500 text-sm mt-1">Prašome užpildyti šį laukelį</p>
+                    <p className="text-red-500 text-sm mt-1">{t('please.fill')}</p>
                   )}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    El. paštas
+                    {t('email')}
                   </label>
                   <input
                     type="email"
@@ -312,16 +312,16 @@ export function ApartmentPage() {
                     className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary ${
                       emailError ? 'border-red-500' : 'border-gray-300'
                     }`}
-                    placeholder="El paštas"
+                    placeholder={t('enter.email')}
                   />
                   {emailError && (
-                    <p className="text-red-500 text-sm mt-1">Prašome užpildyti šį laukelį</p>
+                    <p className="text-red-500 text-sm mt-1">{t('please.fill')}</p>
                   )}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Telefono numeris
+                    {t('phone')}
                   </label>
                   <div className="relative">
                     <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -335,17 +335,17 @@ export function ApartmentPage() {
                       className={`w-full pl-12 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary ${
                         phoneNumberError ? 'border-red-500' : 'border-gray-300'
                       }`}
-                      placeholder="Telefono numeris"
+                      placeholder={t('enter.phone')}
                     />
                   </div>
                   {phoneNumberError && (
-                    <p className="text-red-500 text-sm mt-1">Prašome užpildyti šį laukelį</p>
+                    <p className="text-red-500 text-sm mt-1">{t('please.fill')}</p>
                   )}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Svečių skaičius
+                    {t('number.of.guests')}
                   </label>
                   <div className="relative">
                     <Users className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -356,7 +356,6 @@ export function ApartmentPage() {
                       value={numberOfGuests}
                       onChange={(e) => setNumberOfGuests(parseInt(e.target.value))}
                       className="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                      placeholder="Įveskite svečių skaičių"
                     />
                   </div>
                 </div>
@@ -369,7 +368,7 @@ export function ApartmentPage() {
                       onChange={(e) => setHasPets(e.target.checked)}
                       className="rounded border-gray-300 text-primary focus:ring-primary"
                     />
-                    <span>Augintinis (+10€)</span>
+                    <span>{t('pet.fee')}</span>
                   </label>
 
                   {apartment.id === 'pikulas' && (
@@ -380,7 +379,7 @@ export function ApartmentPage() {
                         onChange={(e) => setExtraBed(e.target.checked)}
                         className="rounded border-gray-300 text-primary focus:ring-primary"
                       />
-                      <span>Papildoma lova (+15€)</span>
+                      <span>{t('extra.bed')} (+15€)</span>
                     </label>
                   )}
                 </div>
@@ -388,27 +387,27 @@ export function ApartmentPage() {
                 {checkIn && checkOut && (
                   <div className="p-4 bg-gray-50 rounded-lg space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Nuo </span>
+                      <span className="text-gray-600">{t('price.per.night')}</span>
                       <span>€{apartment.price_per_night}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Naktų skaičius</span>
+                      <span className="text-gray-600">{t('number.of.nights')}</span>
                       <span>{differenceInDays(checkOut, checkIn)}</span>
                     </div>
                     {hasPets && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Augintinio mokestis</span>
+                        <span className="text-gray-600">{t('pet.charge')}</span>
                         <span>€10</span>
                       </div>
                     )}
                     {apartment.id === 'pikulas' && extraBed && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Papildoma lova</span>
+                        <span className="text-gray-600">{t('extra.bed.charge')}</span>
                         <span>€15</span>
                       </div>
                     )}
                     <div className="flex justify-between font-bold pt-2 border-t border-gray-200">
-                      <span>Viso</span>
+                      <span>{t('total')}</span>
                       <span>€{totalPrice.toFixed(2)}</span>
                     </div>
                   </div>
@@ -419,7 +418,7 @@ export function ApartmentPage() {
                   disabled={!checkIn || !checkOut || !email || !fullName || !phoneNumber}
                   className="w-full bg-[#807730] hover:bg-[#6a632a] text-white py-3 rounded-lg font-medium transition-colors disabled:opacity-50"
                 >
-                  Rezervuoti
+                  {t('book.now')}
                 </button>
 
                 {error && (
