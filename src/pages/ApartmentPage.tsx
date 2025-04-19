@@ -158,7 +158,7 @@ export function ApartmentPage() {
     }
     
     // Add extra bed fee if applicable for Pikulas apartment
-    if (apartment.id === 'pikulas' && extraBed) {
+    if (apartment.id === '0dd964df-1b77-4bb2-9e22-6ebf5fe2b9f4' && extraBed) {
       totalPrice += 15;
     }
 
@@ -181,7 +181,7 @@ export function ApartmentPage() {
       'metadata[has_pets]': hasPets ? 'true' : 'false',
       'metadata[pet_fee]': hasPets ? '10' : '0',
       'metadata[has_extra_bed]': extraBed ? 'true' : 'false',
-      'metadata[extra_bed_fee]': (apartment.id === 'pikulas' && extraBed) ? '15' : '0',
+      'metadata[extra_bed_fee]': (apartment.id === '0dd964df-1b77-4bb2-9e22-6ebf5fe2b9f4' && extraBed) ? '15' : '0',
       'metadata[total_price]': totalPrice.toString(),
       'metadata[guest_name]': fullName,
       'metadata[guest_email]': email,
@@ -217,7 +217,7 @@ export function ApartmentPage() {
       total += 10;
     }
 
-    if (apartment.id === 'pikulas' && extraBed) {
+    if (apartment.id === '0dd964df-1b77-4bb2-9e22-6ebf5fe2b9f4' && extraBed) {
       total += 15;
     }
 
@@ -403,7 +403,7 @@ export function ApartmentPage() {
                     <span>{t('pet.fee')}</span>
                   </label>
 
-                  {apartment.id === 'pikulas' && (
+                  {apartment.id === '0dd964df-1b77-4bb2-9e22-6ebf5fe2b9f4' && (
                     <label className="flex items-center gap-2">
                       <input
                         type="checkbox"
@@ -411,7 +411,7 @@ export function ApartmentPage() {
                         onChange={(e) => setExtraBed(e.target.checked)}
                         className="rounded border-gray-300 text-primary focus:ring-primary"
                       />
-                      <span>Papildoma lova (+15€)</span>
+                      <span>{t('extra.bed')}</span>
                     </label>
                   )}
                 </div>
@@ -432,9 +432,9 @@ export function ApartmentPage() {
                         <span>€10</span>
                       </div>
                     )}
-                    {apartment.id === 'pikulas' && extraBed && (
+                    {apartment.id === '0dd964df-1b77-4bb2-9e22-6ebf5fe2b9f4' && extraBed && (
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Papildoma lova</span>
+                        <span className="text-gray-600">{t('extra.bed.charge')}</span>
                         <span>€15</span>
                       </div>
                     )}
