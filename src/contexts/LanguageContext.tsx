@@ -197,7 +197,69 @@ const translations = {
     'guest': 'Svečias',
     'total.price': 'Bendra suma',
     'discount': 'Nuolaida',
-    'proceed.to.payment': 'Tęsti į apmokėjimą'
+    'proceed.to.payment': 'Tęsti į apmokėjimą',
+    'rules.title': 'Taisyklės, kuriomis saugome ramybę ir bendrystę',
+    'rules.intro': 'Šios taisyklės sukurtos tam, kad mūsų nuomuojami namai, juos supanti gamta ir Jūsų poilsis būtų saugūs, harmoningai sugyventų tarpusavyje. Rezervuodami apsistojimą Girios Horizonte ir atvykdami į mūsų erdves, patvirtinate, kad susipažinote su šiomis taisyklėmis ir joms pritariate. Jei jaučiate, kad šios taisyklės Jums netinka – kviečiame susilaikyti nuo rezervacijos.',
+    'check.in.time': 'Atvykimo laikas nuo 15:00',
+    'check.out.time': 'Išvykimo laikas iki 11:00',
+    'payment.note': 'Apmokėjus rezervaciją, Jūs patvirtinate, kad sutinkate su visomis mūsų taisyklėmis. Neišbuvus numatyto (rezervuoto) laiko, pinigai negražinami.',
+    'cancellation.title': 'REZERVACIJOS ATŠAUKIMAS/PERKĖLIMAS',
+    'cancellation.rules': 'Rezervacijas atšaukti, perkelti rezervacijos datą galima likus ne mažiau nei 10 dienų iki atvykimo datos. Galimas 100% pinigų grąžinimas. Vėliau rezervacijų atšaukimas negalimas dėl jokių priežasčių – pasikeitusių planų, ligų ar kitų aplinkybių. Jūsų rezervacijos laiku galimas ir kitų žmonių atvykimas, bet apie tai reikia pranešti iš anksto. Taip pat atvykstantieji žmonės turi būti susipažinę su mūsų sąlygomis ir taisyklėmis. Perkėlus datą, jei tos datos suma mažesnė – skirtumas negrąžinamas, jei tos datos suma didesnė, reikalinga skirtumo priemoka. Rezervacijos perkėlimas galimas tik vieną kartą.',
+    'pets.title': 'AUGINTINIAI',
+    'pets.rules': 'Priimame ir Jūsų augintinius. PRIIMAME TIK ŠUNIS. Sumokėjus papildomą 10 eur mokestį galima atvykti su naminiais gyvūnais. Gyvūno paliktas išmatas privalo surinkti jo šeimininkai. Už bet kokią augintinių padarytą žalą atsako jų šeimininkai. Priimami tik sveiki, neagresyvūs, stabilios psichikos gyvūnai. Svečias, atvykęs su augintiniu, yra atsakingas už Girios Horizonte gyvenantį gyvūną ir įsipareigoja laikytis šių taisyklių bei visiškai atlyginti gyvūno padarytą žalą Girios Horizonto, teritorijai ir/ar tretiesiems asmenims. Laikant gyvūną namelyje nesuderinus iš anksto - taikoma 100 Eur/d. bauda.',
+    'prohibited.title': 'POILSIAUTOJAMS DRAUDŽIAMA',
+    'prohibited.rules': [
+      'Rūkyti Girios Horizonto teritorijoje griežtai draudžiama. Negalimas ir elektroninių cigarečių, "woopų" ir panašaus tipo rūkymo priemonių, kaljanų naudojimas apartamentų, namelių bei namo ir pirties viduje.',
+      'Draudžiama triukšmauti, garsiai klausytis muzikos. Girios Horizonto teritorija skirta tik ramiam poilsiui, tad labai prašome gerbti visų privatumą ir ramybę. Ramybės bei tylos laikas nuo 22:00 - 08:00.',
+      'Šiukšlinti ar kitaip niokoti teritoriją ar namelių bei pirties vidaus inventorių.',
+      'Pasikviesti papildomų draugų, žmonių nei nakvynei, nei trumpam pabuvimui - griežtai draudžiama.',
+      'Nesimaudykite apsvaigę nuo alkoholio ar kitų psichiką veikiančių medžiagų.'
+    ],
+    'fire.safety.title': 'PRIEŠGAISRINĖS SAUGOS IR SAUGAUS ELGESIO TAISYKLĖS',
+    'fire.safety.rules': [
+      'Kadangi Girios Horizontas yra įsikūręs miškingoje teritorijoje, tai bet kokios ugnies kūrenimas lauke, Girios Horizonto teritorijoje negalimas ir draudžiamas iškyrūs tam padarytas specialias laužavietes ir griliaus vietas.',
+      'Žvakės lauke gali būti degamos tik su priežiūra ir specialiuose induose. Be priežiūros uždegtų žvakių žibintuose palikti negalima.',
+      'Patalpose žvakes galima deginti tik tam skirtose žvakidėse, žvakių be priežiūros palikti negalima.',
+      'Gintaro namo viduje esantį židinį galima kūrenti, bet tik su priežiūra ir GRIEŽTAI draudžiama palikti židinį su degančią ar rusenančia liepsna. Galima kūrenti tik malkas jokių kitų atliekų negalima dėti į židinį. Laikytis saugaus atstumo nuo židinio.',
+      'Visoje Girios Horizonto teritorijoje draudžiama naudoti fejerverkus.',
+      'Naudotis elektros prietaisais, laikantis saugumo reikalavimų.',
+      'Nepalikti be priežiūros įjungtų elektros prietaisų.'
+    ],
+    'guest.responsibility.title': 'POILSIAUTOJŲ ATSAKOMYBĖ',
+    'guest.responsibility.rules': [
+      'Už atsivežto maisto kokybę ir šviežumą, atsako patys poilsiautojai.',
+      'Poilsiautojui susižalojus pačiam arba sužalojus savo turtą dėl savo kaltės, pažeidžiant saugaus elgesio, priešgaisrines ir vidaus tvarkos taisykles, paslaugos teikėjas už tai neatsako.',
+      'Už nelaimingus atsitikimus, galinčius įvykti Girios Horizonto teritorijoje ar už jos ribų (apartamentų, namo ar namelio viduje, terasoje, visoje teritorijoje, maudantis ežere, dviračių žygyje ir t.t.) yra atsakingi patys poilsiautojai.',
+      'Už nelaimingus atsitikimus, įvykusius dėl alkoholio, atsako pats poilsiautojas.',
+      'Poilsiautojai visiškai materialiai atsako už sugadintą ar sunaikintą nameliuose ir Girios Horizonto teritorijoje esantį kilnojamąjį ir nekilnojamąjį turtą, bei materialines vertybes (už padarytą materialinę žalą poilsiautojas atsako LR įstatymų nustatyta tvarka).',
+      'Dėl poilsiautojų neatsargumo kilus gaisrui, kuris sugadino namelius ar aplinkines teritorijas, už visus dėl to atsiradusius nuostolius atsako poilsiautojai.',
+      'Aparatamentuose, nameliuose ir name, ir jų teritorijoje esantys daiktai yra sodybos nuosavybė, todėl poilsiautojas (-iai) neturi teisės juos pasiimti išvykdamas iš sodybos.',
+      'Jei pastebite kokius gedimus ar pažeidimus, praneškite nedelsdami. Už sugadintus prietaisus, ilgalaikį ir trumpalaikį turtą taikoma bauda, kurią įvardija Girios Horizonto administracija.',
+      'Atvykus su vaikais, rūpintis jų saugumu. Už jų priežiūrą teritorijoje atsakomybę prisiima tėvai/globėjai, su kuriais jis atvyko.',
+      'Iškylaujant lauke nenaudoti kambaryje esančių pledukų (nebent apsijuosti), rakšluosčių, antklodžių ar pagalvėlių.',
+      'Girios Horizonto administratoriai turi teisę išprašyti iš teritorijos tuos lankytojus, kurie nesilaiko vidaus taisyklių, savo elgesiu ir veiksmais daro žalą teritorijos infrastruktūrai. Tokiu atveju rezervacijos mokestis negrąžinamas.'
+    ],
+    'sauna.rules.title': 'PIRTIES "DRUSKA" TAISYKLĖS',
+    'sauna.rules': [
+      'Į pirtį prašome ateiti ir išeiti numatytu ir jums paskirtu laiku, - kadangi prieš jus ar po jūsų, pirtyje gali lankytis ir kiti svečiai.',
+      'Pirties zonoje rekomenduojame turėti ir avėti šlepetes, atkreipkite dėmesį, grindys gali būti slidžios.',
+      'Rekomenduojama alkoholio nevartoti pirties procedūrų metu.',
+      'Muzikos galima klausytis tik ne ramybės ir tylos laiku (nuo 22:00-08:00)',
+      'Panaudotus Arbatos puodelius, vyno taures ar kitus indus privaloma išsiplauti ir padėti į vietą.',
+      'Pirties reikiamą tekstilę, svečiai įsipareigoja turėti savo asmeninę (rankšluosčiai, chalatai, šlepetės ir pan).'
+    ],
+    'sauna.prohibited.title': 'PIRTYJE DRUSKA DRAUDŽIAMA',
+    'sauna.prohibited.rules': [
+      'Pirtyje naudoti savo šveitiklius, aliejus, mesų ar kitas priemones.',
+      'Šokinėti nuo lieptelio į ežerą. Ežeras seklus ir yra dumblo.',
+      'Pirties patalpose bei visoje teritorijoje rūkyti(garinti).',
+      'Triukšmauti.',
+      'Pirties lankytojai pilnai atsakingi už savo sveikatą ir saugumą.',
+      'Išvykstant, paliekame pirties patalpas tvarkingas.',
+      'Išeinant iš pirties, išjungti visur apšvietimą.',
+      'Išeinant iš pirties, užrakinti pirties pastato duris, raktą palikti dėžutėje, kur jį ir radote, dėžutę užrakinti.'
+    ],
+    'liability.note': 'Už padarytą materialinę žalą lankytojai atsako LR įstatymų numatyta tvarka. Šeimininkams nuostoliai padengiami prieš išvykstant.'
   }
 };
 

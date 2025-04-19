@@ -80,7 +80,7 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
       totalPrice += 10;
     }
     
-    if (apartment.id === 'pikulas' && bookingDetails.extraBed) {
+    if (apartment.id === '0dd964df-1b77-4bb2-9e22-6ebf5fe2b9f4' && bookingDetails.extraBed) {
       totalPrice += 15;
     }
 
@@ -341,7 +341,8 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
 
             <h3 className="text-lg font-bold mb-4">AUGINTINIAI</h3>
             <p className="mb-6">
-              Priimame ir Jūsų augintinius. PRIIMAME TIK ŠUNIS. Sumokėjus papildomą 10 eur mokestį galima atvykti su naminiais gyvūnais. Gyvūno paliktas išmatas privalo surinkti jo šeimininkai. Už bet kokią augintinių padarytą žalą atsako jų šeimininkai. Priimami tik sveiki, neagresyvūs, stabilios psichikos gyvūnai. Svečias, atvykęs su augintiniu, yra atsakingas už Girios Horizonte gyvenantį gyvūną ir įsipareigoja laikytis šių taisyklių bei visiškai atlyginti gyvūno padarytą žalą Girios Horizonto, teritorijai ir/ar tretiesiems asmenims. Laikant gyvūną namelyje nesuderinus iš anksto - taikoma 100 Eur/d. bauda.
+              Priimame ir Jūsų augintinius. PRIIMAME TIK ŠUNIS. Sumokėjus papildomą 10 eur mokestį galima atvykti su naminiais gyvūnais. Gyvūno paliktas išmatas privalo surinkti jo šeimininkai. Už bet kokią augintinių padarytą žalą atsako jų šeimininkai. Priimami tik sveiki, neagresyvūs, stabilios psichikos gyvūnai. Svečias, atvykęs su augintiniu, yra atsakingas už Girios Horizonte gyvenantį gyvūną ir įsipareigoja laikytis šių taisyklių bei visiškai atlyginti gyvūno padarytą žalą Girios Horizonto, teritorijai ir/ar tretiesi
+ems asmenims. Laikant gyvūną namelyje nesuderinus iš anksto - taikoma 100 Eur/d. bauda.
             </p>
 
             <h3 className="text-lg font-bold mb-4">POILSIAUTOJAMS DRAUDŽIAMA</h3>
@@ -472,14 +473,12 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
                   <span className="font-medium">10€</span>
                 </div>
               )}
-              {apartment.id === 'pikulas' && bookingDetails.extraBed && (
+              {apartment.id === '0dd964df-1b77-4bb2-9e22-6ebf5fe2b9f4' && bookingDetails.extraBed && (
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600">Papildoma lova</span>
                   <span className="font-medium">15€</span>
                 </div>
               )}
-            
-            
             </div>
 
             <div className="border-t border-gray-200 pt-4">
@@ -623,7 +622,7 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
                 <span className="text-gray-700">Augintinio mokestis (10€)</span>
               </label>
 
-              {apartment.id === 'pikulas' && (
+              {apartment.id === '0dd964df-1b77-4bb2-9e22-6ebf5fe2b9f4' && (
                 <label className="flex items-center gap-3">
                   <input
                     type="checkbox"
@@ -651,7 +650,7 @@ export function BookingForm({ apartment, onClose }: BookingFormProps) {
                   <span className="font-medium">10€</span>
                 </div>
               )}
-              {apartment.id === 'pikulas' && bookingDetails.extraBed && (
+              {apartment.id === '0dd964df-1b77-4bb2-9e22-6ebf5fe2b9f4' && bookingDetails.extraBed && (
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600">Papildoma lova</span>
                   <span className="font-medium">15€</span>

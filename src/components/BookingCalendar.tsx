@@ -95,89 +95,61 @@ export function BookingCalendar({
             <X className="w-6 h-6" />
           </button>
 
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Vidaus Tvarkos Taisyklės</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('house.rules')}</h2>
 
           <div className="prose prose-sm max-w-none overflow-y-auto max-h-[70vh] pr-4">
-            <h3 className="text-xl font-bold mb-4">Įvadas</h3>
-            <p className="mb-6">
-              Šios taisyklės sukurtos tam, kad mūsų nuomuojami namai, juos supanti gamta ir Jūsų poilsis būtų saugūs, harmoningai sugyventų tarpusavyje. Rezervuodami apsistojimą Girios Horizonte ir atvykdami į mūsų erdves, patvirtinate, kad susipažinote su šiomis taisyklėmis ir joms pritariate. Jei jaučiate, kad šios taisyklės Jums netinka – kviečiame susilaikyti nuo rezervacijos.
-            </p>
+            <h3 className="text-xl font-bold mb-4">{t('rules.title')}</h3>
+            <p className="mb-6">{t('rules.intro')}</p>
 
-            <h3 className="text-lg font-bold mb-4">Atvykimo / Išvykimo Laikas</h3>
-            <p>Atvykimas nuo: 15:00</p>
-            <p className="mb-6">Išvykimas iki: 11:00</p>
+            <div className="mb-6">
+              <p className="font-semibold">{t('check.in.time')}</p>
+              <p className="font-semibold">{t('check.out.time')}</p>
+            </div>
 
-            <h3 className="text-lg font-bold mb-4">Mokėjimai ir Atsakomybė</h3>
-            <p className="mb-6">Apmokėjus rezervaciją, Jūs patvirtinate, kad sutinkate su visomis mūsų taisyklėmis. Neišbuvus numatyto (rezervuoto) laiko, pinigai negražinami.</p>
+            <p className="mb-6">{t('payment.note')}</p>
 
-            <h3 className="text-lg font-bold mb-4">Rezervacijos Atšaukimas / Perkėlimas</h3>
+            <h3 className="text-lg font-bold mb-4">{t('cancellation.title')}</h3>
+            <p className="mb-6">{t('cancellation.rules')}</p>
+
+            <h3 className="text-lg font-bold mb-4">{t('pets.title')}</h3>
+            <p className="mb-6">{t('pets.rules')}</p>
+
+            <h3 className="text-lg font-bold mb-4">{t('prohibited.title')}</h3>
             <ul className="list-disc pl-5 mb-6">
-              <li>Rezervaciją galima atšaukti ar perkelti likus bent 10 dienų iki atvykimo, su 100% pinigų grąžinimu.</li>
-              <li>Vėlesnis atšaukimas negalimas dėl jokių priežasčių.</li>
-              <li>Kiti žmonės gali atvykti tik iš anksto suderinus.</li>
-              <li>Rezervacijos perkėlimas galimas tik vieną kartą.</li>
-              <li>Duomenys naudojami tik rezervavimo tikslais (pagal 1997-09-28 duomenų apsaugos sutartį).</li>
+              {t('prohibited.rules').map((rule: string, index: number) => (
+                <li key={index}>{rule}</li>
+              ))}
             </ul>
 
-            <h3 className="text-lg font-bold mb-4">Augintiniai</h3>
+            <h3 className="text-lg font-bold mb-4">{t('fire.safety.title')}</h3>
             <ul className="list-disc pl-5 mb-6">
-              <li>Priimami tik šunys.</li>
-              <li>Mokestis – 10 €.</li>
-              <li>Šeimininkai privalo surinkti išmatas ir kompensuoti žalą.</li>
-              <li>Turi būti sveiki, neagresyvūs gyvūnai.</li>
-              <li>Už laikymą namelyje be leidimo – 100 €/d. bauda.</li>
+              {t('fire.safety.rules').map((rule: string, index: number) => (
+                <li key={index}>{rule}</li>
+              ))}
             </ul>
 
-            <h3 className="text-lg font-bold mb-4">Poilsiautojams Draudžiama</h3>
+            <h3 className="text-lg font-bold mb-4">{t('guest.responsibility.title')}</h3>
             <ul className="list-disc pl-5 mb-6">
-              <li>Rūkyti visoje teritorijoje (taip pat elektronines cigaretes, kaljanus ir pan.).</li>
-              <li>Triukšmauti, garsiai leisti muziką. Ramybės laikas: 22:00–08:00.</li>
-              <li>Šiukšlinti ar niokoti inventorių.</li>
-              <li>Kviesti papildomus svečius be leidimo.</li>
-              <li>Maudytis apsvaigus.</li>
+              {t('guest.responsibility.rules').map((rule: string, index: number) => (
+                <li key={index}>{rule}</li>
+              ))}
             </ul>
 
-            <h3 className="text-lg font-bold mb-4">Priešgaisrinė Saugos Ir Saugus Elgesys</h3>
+            <h3 className="text-lg font-bold mb-4">{t('sauna.rules.title')}</h3>
             <ul className="list-disc pl-5 mb-6">
-              <li>Ugnį galima kurti tik specialiose laužavietėse ir griliuose.</li>
-              <li>Žvakės – tik su priežiūra, specialiuose induose.</li>
-              <li>Židinį (Gintaro name) galima kūrenti tik su priežiūra, tik malkomis.</li>
-              <li>Draudžiami fejerverkai.</li>
-              <li>Nenaudoti prietaisų be priežiūros.</li>
+              {t('sauna.rules').map((rule: string, index: number) => (
+                <li key={index}>{rule}</li>
+              ))}
             </ul>
 
-            <h3 className="text-lg font-bold mb-4">Poilsiautojų Atsakomybė</h3>
+            <h3 className="text-lg font-bold mb-4">{t('sauna.prohibited.title')}</h3>
             <ul className="list-disc pl-5 mb-6">
-              <li>Už maisto kokybę atsako patys.</li>
-              <li>Už žalą, traumas ar gaisrą – atsako pažeidėjas.</li>
-              <li>Už pažeistus daiktus atsako materialiai.</li>
-              <li>Vaikai – tėvų/globėjų atsakomybė.</li>
-              <li>Negalima naudoti kambario pledukų ar pagalvėlių lauke.</li>
-              <li>Administracija turi teisę išprašyti nesilaikančius taisyklių – be pinigų grąžinimo.</li>
+              {t('sauna.prohibited.rules').map((rule: string, index: number) => (
+                <li key={index}>{rule}</li>
+              ))}
             </ul>
 
-            <h3 className="text-lg font-bold mb-4">Pirties "Druska" Taisyklės</h3>
-            <ul className="list-disc pl-5 mb-6">
-              <li>Ateikite/išeikite laiku – kiti svečiai gali turėti rezervaciją.</li>
-              <li>Dėvėkite šlepetes.</li>
-              <li>Alkoholio vartojimas nerekomenduojamas.</li>
-              <li>Muzikos klausyti tik ne ramybės laiku (22:00–08:00).</li>
-              <li>Indus būtina išplauti ir padėti į vietą.</li>
-              <li>Reikia atsinešti savo tekstilę (rankšluosčiai, šlepetės ir t.t.).</li>
-            </ul>
-
-            <h3 className="text-lg font-bold mb-4">Pirtyje Draudžiama</h3>
-            <ul className="list-disc pl-5 mb-6">
-              <li>Naudoti šveitiklius, aliejus, medų ir pan.</li>
-              <li>Šokinėti nuo lieptelio (ežeras seklus).</li>
-              <li>Rūkyti ar garinti.</li>
-              <li>Triukšmauti.</li>
-              <li>Nepalikti netvarkos.</li>
-              <li>Išeinant išjungti apšvietimą ir užrakinti pirtį.</li>
-            </ul>
-
-            <h3 className="text-lg font-bold mb-4">Baigiamoji Pastaba</h3>
-            <p className="mb-6">Už padarytą materialinę žalą atsakoma pagal LR įstatymus, o nuostoliai padengiami prieš išvykstant.</p>
+            <p className="mb-6">{t('liability.note')}</p>
           </div>
 
           <div className="mt-6 pt-6 border-t border-gray-200">
@@ -185,7 +157,7 @@ export function BookingCalendar({
               onClick={() => setShowRules(false)}
               className="w-full bg-primary hover:bg-primary-dark text-white py-4 rounded-xl font-medium transition-colors"
             >
-              Grįžti į rezervaciją
+              {t('back.to.booking')}
             </button>
           </div>
         </div>
